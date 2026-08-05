@@ -1,0 +1,47 @@
+BÁO CÁO THỰC HÀNH LAB 02 - JAVA CONSOLE
+
+Họ và tên: ..............................................................
+Mã sinh viên: ..............................................................
+Lớp: ............................................................................
+
+1. Mô tả cấu trúc Project
+Dự án được quản lý bằng công cụ Maven với tên lab02-java-console. Cấu trúc thư mục tuân thủ theo chuẩn của Maven để đảm bảo tính module và dễ dàng quản lý phụ thuộc (dependencies):
+
+- pom.xml: File cấu hình Maven quan trọng nhất. File này chứa thông tin định danh dự án, các dependencies, và plugin đóng gói. Cụ thể, maven-compiler-plugin được dùng để biên dịch mã nguồn tương thích với Java 8, và maven-jar-plugin được định cấu hình để chỉ định lớp Main cho file thực thi JAR.
+
+- src/main/java/vn/edu/eaut/lab2/: Package chứa mã nguồn chính của phần mềm.
+  + Student.java: Lớp thực thể (Entity) mô tả đối tượng sinh viên. Bao gồm các thuộc tính: mã sinh viên, họ tên, điểm chuyên cần, điểm giữa kỳ, điểm cuối kỳ. Đi kèm là các phương thức getter/setter và hàm khởi tạo (constructor).
+  + GradeCalculator.java: Lớp chứa logic xử lý nghiệp vụ riêng biệt. Nhiệm vụ của lớp này là tính điểm tổng kết bằng công thức (10% chuyên cần + 30% giữa kỳ + 60% cuối kỳ) và dựa vào đó để xét xếp loại bằng chữ (A, B, C, D, F).
+  + App.java: Lớp Main chứa hàm public static void main. Chịu trách nhiệm khởi tạo luồng chạy, tương tác với người dùng qua Console (bằng lớp Scanner), validate (kiểm tra) dữ liệu đầu vào và in ra kết quả cuối cùng.
+
+- target/: Thư mục được Maven tự động sinh ra sau khi chạy lệnh build, chứa các file .class đã biên dịch và file thực thi cuối cùng là lab02-java-console-1.0-SNAPSHOT.jar.
+
+
+2. Các lệnh đã sử dụng
+Trong quá trình phát triển, kiểm thử và chạy phần mềm, các câu lệnh Terminal sau đã được sử dụng:
+
+- mvn clean: Lệnh này dùng để xóa thư mục target/ (nếu đã tồn tại từ những lần build trước). Việc này giúp đảm bảo mã nguồn trong lần build tiếp theo được biên dịch hoàn toàn mới, tránh lỗi lưu cache cũ.
+
+- mvn package (hoặc gộp chung là mvn clean package): Maven sẽ tiến hành biên dịch toàn bộ mã nguồn Java, đóng gói các file class biên dịch được thành một file .jar (nằm trong thư mục target) theo các thông số cấu hình đã khai báo trong file pom.xml.
+
+- java -jar target/lab02-java-console-1.0-SNAPSHOT.jar: Lệnh thực thi trực tiếp ứng dụng Java từ file JAR đã được đóng gói mà không cần phải gọi tên từng lớp cụ thể.
+
+
+3. Lỗi gặp phải và cách xử lý
+Trong quá trình code và chạy thử nghiệm (test), một số vấn đề đã được phát hiện và xử lý như sau:
+
+- Lỗi 1: Trôi lệnh (Skip input) khi nhập chuỗi sau khi nhập số.
+  + Mô tả lỗi: Khi sử dụng scanner.nextDouble() để nhận điểm số, con trỏ phím Enter (kí tự xuống dòng \n) không được tiêu thụ. Hậu quả là câu lệnh scanner.nextLine() kế tiếp sẽ đọc ngay khoảng trắng này và bỏ qua bước nhập liệu của người dùng.
+  + Cách xử lý: Thống nhất sử dụng scanner.nextLine() để đọc toàn bộ dòng chữ nhập vào, sau đó ép kiểu sang số bằng hàm Double.parseDouble().
+
+- Lỗi 2: Ứng dụng Crash (Dừng đột ngột) khi người dùng nhập vào chữ thay vì số điểm.
+  + Mô tả lỗi: Nếu tại bước yêu cầu nhập điểm, người dùng vô tình gõ chữ (ví dụ: "muoi", "abc"), chương trình sẽ quăng lỗi ngoại lệ NumberFormatException và văng ra ngoài.
+  + Cách xử lý: Áp dụng khối try - catch bọc quanh dòng mã lấy dữ liệu. Khi có lỗi định dạng, chương trình sẽ catch ngoại lệ và in ra thông báo lỗi thân thiện "Đầu vào không hợp lệ! Vui lòng nhập một số." và lặp lại vòng lặp nhập.
+
+- Lỗi 3: Không thể chạy file .jar vì thiếu Main Manifest Attribute.
+  + Mô tả lỗi: Khi dùng lệnh java -jar lần đầu, màn hình console báo lỗi "no main manifest attribute". Điều này là do cấu trúc file jar chưa xác định được lớp nào chứa hàm main.
+  + Cách xử lý: Mở file pom.xml, cấu hình plugin maven-jar-plugin, bổ sung thẻ <mainClass>vn.edu.eaut.lab2.App</mainClass>. Maven sẽ tự động chèn Main-Class vào manifest lúc build.
+
+- Lỗi 4: Xử lý ngoại lệ logic khi điểm ngoài khoảng 0 đến 10.
+  + Mô tả lỗi: Người dùng nhập điểm số âm (ví dụ: -2) hoặc quá lớn (ví dụ: 12), dẫn tới điểm trung bình bị sai lệch logic thực tế.
+  + Cách xử lý: Bọc logic nhập liệu trong một vòng lặp while(true), tích hợp thêm câu lệnh rẽ nhánh if(score >= 0 && score <= 10). Nếu điểm thỏa mãn mới dùng lệnh break để thoát khỏi vòng lặp, nếu không sẽ in nhắc nhở yêu cầu nhập lại.
