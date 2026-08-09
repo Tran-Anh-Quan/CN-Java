@@ -1,0 +1,42 @@
+  BÁO CÁO THỰC HÀNH LAB 03 - JAVA SWING
+
+  Họ và tên: ..............................................................
+  Mã sinh viên: ..............................................................
+  Lớp: ............................................................................
+
+  1. Mô tả cấu trúc Project
+  Dự án được quản lý bằng công cụ Maven với tên lab03-java-swing. Cấu trúc thư mục tuân thủ theo chuẩn của Maven, tập trung vào việc thiết kế giao diện người dùng (GUI) bằng thư viện Java Swing:
+
+  - pom.xml: File cấu hình dự án Maven quản lý dependencies và các plugin đóng gói (maven-compiler-plugin).
+  - src/main/java/vn/edu/eaut/lab3/: Package chứa toàn bộ mã nguồn của phần mềm.
+    + Bai01HelloSwing.java: Chương trình khởi đầu làm quen với JFrame, hiển thị một cửa sổ cơ bản với JLabel.
+    + Bai02TongHaiSo.java: Xây dựng form nhập liệu cơ bản với JTextField và JButton, xử lý sự kiện click để tính tổng hai số.
+    + Bai03PhuongTrinhBacNhat.java: Giao diện giải phương trình bậc nhất, tiếp nhận tham số từ người dùng và trả về kết quả bằng JOptionPane.
+    + Bai04TamGiacSwing.java: Ứng dụng kiểm tra tính hợp lệ của tam giác, tính chu vi và diện tích với giao diện trực quan.
+    + Bai05FibonacciSwing.java: Sử dụng thành phần JTextArea để hiển thị danh sách các số Fibonacci được sinh ra theo yêu cầu.
+    + Bai06LoginForm.java: Thiết kế màn hình đăng nhập an toàn kết hợp sử dụng JPasswordField cho trường mật khẩu.
+    + Bai07MayTinhMini.java: Ứng dụng mô phỏng máy tính cầm tay (Calculator) bằng việc bố trí các nút bấm (JButton) bằng GridLayout.
+    + Bai08QuanLySinhVien.java & StudentTableModel.java: Chương trình quản lý danh sách sinh viên hoàn chỉnh, ứng dụng mô hình MVC với JTable, TableModel để hiển thị dữ liệu dạng bảng.
+
+  2. Các lệnh đã sử dụng
+  - mvn clean package: Dọn dẹp thư mục target cũ và biên dịch, đóng gói lại toàn bộ project thành file .jar.
+  - mvn exec:java -Dexec.mainClass="vn.edu.eaut.lab3.Bai08QuanLySinhVien": (Hoặc tên class tương ứng) Lệnh hỗ trợ chạy trực tiếp một class cụ thể chứa hàm main() thông qua Maven plugin.
+
+  3. Lỗi gặp phải và cách xử lý
+  Trong quá trình code giao diện bằng Java Swing, một số lỗi đã gặp và cách giải quyết:
+
+  - Lỗi 1: Ứng dụng bị văng lỗi NumberFormatException khi người dùng để trống form hoặc nhập chữ.
+    + Mô tả: Khi sử dụng `Double.parseDouble(txtA.getText())`, nếu ô JTextField trống hoặc chứa ký tự không phải số, chương trình sẽ báo lỗi.
+    + Cách xử lý: Đặt toàn bộ khối lệnh lấy dữ liệu và tính toán vào cấu trúc try-catch. Bắt lỗi Exception và hiển thị một hộp thoại thông báo thân thiện bằng `JOptionPane.showMessageDialog(this, "Vui lòng nhập số hợp lệ!");`.
+
+  - Lỗi 2: Giao diện hiển thị lộn xộn, các thành phần bị đè lên nhau hoặc méo mó khi thay đổi kích thước cửa sổ.
+    + Mô tả: Do mặc định JFrame không sử dụng Layout phù hợp, hoặc setBounds cứng cho từng component nhưng kích thước cửa sổ bị thu phóng.
+    + Cách xử lý: Ứng dụng các LayoutManager chuẩn như `BorderLayout` (chia 5 vùng), `GridLayout` (chia lưới đều đặn, dùng rất tốt cho máy tính mini) hoặc kết hợp các JPanel con lồng vào nhau để quản lý bố cục.
+
+  - Lỗi 3: Nút bấm (JButton) không phản hồi khi click.
+    + Mô tả: Đã khởi tạo nút bấm và thêm vào JFrame nhưng khi chạy và click chuột thì không có hiện tượng gì xảy ra.
+    + Cách xử lý: Thiếu bước đăng ký sự kiện. Cần phải gọi phương thức `.addActionListener(e -> { ... })` cho từng nút bấm hoặc implements ActionListener cho cả lớp và sử dụng `addActionListener(this)`.
+
+  - Lỗi 4: Cập nhật dữ liệu vào JTable nhưng bảng không thay đổi.
+    + Mô tả: Ở bài quản lý sinh viên, sau khi thêm vào List nội bộ, giao diện JTable vẫn hiển thị như cũ.
+    + Cách xử lý: Cần phải gọi hàm `fireTableDataChanged()` của AbstractTableModel để thông báo cho JTable biết dữ liệu đã thay đổi và tiến hành vẽ lại (repaint) bảng.
