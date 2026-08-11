@@ -1,0 +1,25 @@
+BÁO CÁO THỰC HÀNH LAB 04 - JAVA SWING VÀ SWINGWORKER
+
+1. Mục tiêu:
+- Làm quen và áp dụng SwingWorker để xử lý các tác vụ nặng chạy ngầm, đảm bảo giao diện (UI) luôn phản hồi mượt mà, không bị giật lag (tránh lỗi đơ UI).
+- Nắm vững các kỹ thuật tương tác với giao diện: cập nhật tiến độ (Progress Bar), xuất dữ liệu từng phần (publish/process), và hỗ trợ tính năng hủy tác vụ (cancel task) đang thực thi.
+
+2. Các chức năng và ứng dụng đã triển khai thành công:
+Dự án được xây dựng theo chuẩn Maven, bao gồm các ứng dụng thành phần:
+- CountdownFrame: Chức năng đồng hồ đếm ngược thời gian.
+- ProgressDemoFrame: Ứng dụng mô phỏng tiến trình với thanh Progress Bar minh họa tính năng cập nhật tiến độ của SwingWorker.
+- PrimeSumFrame: Chức năng tính tổng các số nguyên tố lên tới một số N, có hiển thị thanh tiến trình và cho phép hủy thao tác khi đang tính toán.
+- FibonacciFrame: Ứng dụng tính toán dãy số Fibonacci ở các vị trí lớn sử dụng SwingWorker.
+- FileLineCounterFrame: Đọc một file văn bản lớn và đếm số dòng, cập nhật thanh quá trình đọc và cho phép hủy quá trình giữa chừng.
+- FileSearchFrame: Tìm kiếm từ khóa trong nội dung file văn bản, thực thi dưới nền không làm treo giao diện.
+- StudentGradeFrame: Hệ thống đọc file dữ liệu sinh viên (students.csv), xử lý đa luồng ngầm bằng SwingWorker và hiển thị dữ liệu dưới dạng bảng (JTable), kèm theo thống kê điểm số.
+
+3. Kết quả đánh giá:
+- Các tính năng đã đáp ứng đầy đủ yêu cầu bài Lab.
+- Phân tách rõ ràng giữa luồng xử lý giao diện (EDT) và luồng xử lý nghiệp vụ, đảm bảo an toàn luồng (Thread-safe).
+- Dự án build và chạy thành công trên JDK môi trường.
+
+-------------------------------
+Sinh viên thực hiện: [Điền tên sinh viên]
+Mã sinh viên: [Điền mã sinh viên]
+Lớp: [Điền lớp học]
