@@ -1,0 +1,27 @@
+BÁO CÁO NGẮN: LUỒNG XỬ LÝ REQUEST -> SERVLET -> JSP -> RESPONSE (Mô hình MVC)
+
+Trong kiến trúc Java Web (Mô hình MVC), luồng dữ liệu hoạt động theo 4 bước cơ bản như sau:
+
+1. Client Gửi Yêu Cầu (Request):
+- Người dùng (Client/Browser) tương tác với giao diện (ví dụ: bấm nút "Đăng nhập", hoặc nhập một URL).
+- Trình duyệt tạo và gửi một HTTP Request chứa thông tin (tham số, header) đến máy chủ Web (Web Server / Servlet Container như Apache Tomcat).
+
+2. Servlet Xử Lý Nghiệp Vụ (Controller):
+- Tomcat nhận Request, dựa vào đường dẫn URL (mapping) để chuyển giao cho Servlet tương ứng xử lý (qua hàm doGet hoặc doPost).
+- Tại đây, Servlet đóng vai trò là "Bộ điều khiển" (Controller):
+  + Lấy dữ liệu người dùng gửi lên: request.getParameter(...)
+  + Xử lý logic nghiệp vụ, tương tác với CSDL (Database) thông qua các lớp DAO/Store.
+  + Sau khi có kết quả, Servlet đóng gói dữ liệu này (Model) và gắn vào đối tượng request: request.setAttribute("dataKey", dataValue);
+  + Cuối cùng, Servlet điều hướng (Forward) Request và Response sang trang JSP để hiển thị giao diện: 
+    request.getRequestDispatcher("/view.jsp").forward(request, response);
+
+3. JSP Tạo Giao Diện (View):
+- JSP nhận lại luồng xử lý (kèm theo đối tượng request đã chứa dữ liệu từ Servlet).
+- JSP đóng vai trò là "Giao diện hiển thị" (View):
+  + Sử dụng các thẻ JSTL hoặc EL (Expression Language, ví dụ: ${dataKey}) để trích xuất dữ liệu động.
+  + Trộn lẫn dữ liệu động với các thẻ HTML, CSS tĩnh để "render" ra một mã nguồn HTML hoàn chỉnh cuối cùng.
+
+4. Máy Chủ Trả Về Kết Quả (Response):
+- Khi trang JSP hoàn tất việc tạo HTML, mã HTML này được đóng gói vào đối tượng HTTP Response.
+- Tomcat gửi HTTP Response này trả về lại qua mạng cho trình duyệt (Client).
+- Trình duyệt phân tích cú pháp HTML/CSS và hiển thị giao diện kết quả cho người dùng, kết thúc một chu trình.
