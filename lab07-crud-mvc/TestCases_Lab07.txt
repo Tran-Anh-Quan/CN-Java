@@ -1,0 +1,52 @@
+================================================================================
+KỊCH BẢN KIỂM THỬ (TEST CASES) - LAB 07 MVC CRUD TỔNG HỢP
+================================================================================
+
+1. BÀI 1 & BÀI 5: ĐĂNG NHẬP VÀ PHÂN QUYỀN (AuthFilter)
+- Bước 1: Khởi động Tomcat (`mvn clean tomcat7:run`).
+- Bước 2: Truy cập trang chủ `http://localhost:8080/`. Chọn bất kỳ chức năng Quản lý nào trên Menu (VD: Sinh viên, Sách...).
+- Kết quả mong muốn: Bị chặn và chuyển hướng sang trang `login.jsp`.
+- Bước 3: Đăng nhập sai (admin / 123456). Kết quả: Báo lỗi chữ đỏ "Sai tài khoản hoặc mật khẩu".
+- Bước 4: Đăng nhập đúng (admin / admin123). Kết quả: Đăng nhập thành công, nhảy vào trang quản lý đã chọn.
+
+2. BÀI 2, 3, 4 & 11: QUẢN LÝ SINH VIÊN (CRUD & Phân trang)
+- Bước 1: Vào Quản lý Sinh viên. Thấy danh sách 5 sinh viên (do đã phân trang trang 1).
+- Bước 2: Bấm chuyển trang số 2, số 3 ở dưới cùng màn hình. Kết quả mong muốn: Danh sách nhảy qua các sinh viên tiếp theo.
+- Bước 3: Bấm "Thêm sinh viên mới", điền thông tin và "Lưu".
+- Bước 4: Bấm "Sửa" sinh viên vừa tạo, đổi tên hoặc đổi lớp rồi "Lưu". Kết quả: Danh sách hiển thị thông tin mới.
+- Bước 5: Bấm "Xóa". Kết quả: Sinh viên đó biến mất khỏi danh sách.
+
+3. BÀI 6: QUẢN LÝ SÁCH & TÌM KIẾM
+- Bước 1: Vào Quản lý Sách.
+- Bước 2: Dùng ô "Tìm kiếm" nhập từ khóa "Java". Kết quả: Chỉ hiển thị sách "Lập trình Java".
+- Bước 3: Gõ từ khóa tác giả "Lê Thị B" và tìm kiếm. Kết quả: Hiện ra sách "Cấu trúc dữ liệu".
+- Bước 4: Thử chức năng thêm/sửa/xóa tương tự sinh viên.
+
+4. BÀI 7: QUẢN LÝ SẢN PHẨM & VALIDATE
+- Bước 1: Vào Quản lý Sản Phẩm. Bấm "Thêm sản phẩm mới".
+- Bước 2: Nhập "Giá" = -50000 và "Số lượng" = -2. Bấm "Lưu".
+- Kết quả mong muốn: Hệ thống từ chối lưu, trả về thông báo lỗi màu đỏ: "Giá phải > 0 và Số lượng phải >= 0".
+- Bước 3: Sửa lại Giá = 100000, Số lượng = 5. Bấm "Lưu". Kết quả: Lưu thành công ra danh sách.
+
+5. BÀI 8: QUẢN LÝ LỚP HỌC
+- Bước 1: Vào Quản lý Lớp học. 
+- Bước 2: Thử chức năng tìm kiếm với "KTPM1" hoặc thêm mới một lớp. (Hoạt động tương tự Bài 6).
+
+6. BÀI 9: QUẢN LÝ ĐIỂM SINH VIÊN & TỰ ĐỘNG XẾP LOẠI
+- Bước 1: Vào Quản lý Điểm SV.
+- Bước 2: Bấm "Nhập điểm mới". Gắn cho sinh viên mã SV03 các điểm: CC=10, GK=5, CK=3.
+- Kết quả mong muốn: Hệ thống lưu thành công. Ở ngoài màn hình danh sách, cột "Tổng kết" sẽ tự tính: (10*0.1) + (5*0.3) + (3*0.6) = 1 + 1.5 + 1.8 = 4.3. 
+- Kết quả Xếp loại hiển thị tương ứng là "D" và màu chữ được tô đỏ hoặc xanh.
+
+7. BÀI 10: GIỎ HÀNG BẰNG SESSION
+- Bước 1: Vào Quản lý Sản Phẩm. Bấm nút màu xanh "Mua ngay" tại 2 sản phẩm khác nhau.
+- Bước 2: Chuyển sang Menu "Giỏ Hàng". 
+- Kết quả mong muốn: Hiển thị 2 sản phẩm vừa mua, số lượng mặc định là 1. Tổng tiền hiển thị chính xác.
+- Bước 3: Trong Giỏ hàng, sửa số lượng 1 sản phẩm lên thành 5 và bấm "Cập nhật".
+- Kết quả mong muốn: Thành tiền của sản phẩm đó tăng lên x5. Tổng tiền bên dưới cũng tăng theo.
+- Bước 4: Bấm "Xóa". Sản phẩm biến mất khỏi giỏ, tổng tiền tụt xuống.
+
+8. BÀI 12: LISTENER GHI LOG
+- Bước 1: Mở cửa sổ Terminal (nơi chạy lệnh maven).
+- Bước 2: Quan sát log. Mỗi khi bạn tắt server hoặc bật server, dòng chữ `========== [APP LOG] Ứng dụng đã khởi động/dừng ==========` sẽ hiện ra.
+- Bước 3: Bạn thử mở trình duyệt Ẩn danh, truy cập trang web. Dòng chữ `[APP LOG] Một Session mới được tạo` sẽ hiện ra ở Terminal.

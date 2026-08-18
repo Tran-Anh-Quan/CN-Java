@@ -1,0 +1,83 @@
+================================================================
+         BAO CAO LAB 07 - CRUD MVC (Java Web)
+
+================================================================
+
+I. MUC TIEU BAI LAB
+----------------------------------------------------------------
+Xay dung ung dung quan ly du lieu theo mo hinh MVC su dung:
+- Java Servlet lam Controller
+- JSP lam View
+- Repository (In-Memory) lam Model/Data Layer
+- JSTL de xu ly logic hien thi trong JSP
+
+II. CAC CHUC NANG DA THUC HIEN
+----------------------------------------------------------------
+1. Quan ly Sinh Vien
+   - Hien thi danh sach sinh vien (co phan trang)
+   - Them, sua, xoa, xem chi tiet sinh vien
+
+2. Quan ly Sach
+   - Hien thi danh sach sach
+   - Tim kiem theo ten / tac gia
+   - Them, sua, xoa sach
+
+3. Quan ly San Pham
+   - Hien thi danh sach san pham
+   - Them, sua, xoa san pham
+   - Tich hop nut "Mua" de them vao gio hang
+
+4. Quan ly Lop Hoc
+   - Hien thi danh sach lop hoc
+   - Tim kiem theo ma / ten lop
+   - Them, sua, xoa lop hoc
+
+5. Quan ly Diem Sinh Vien
+   - Nhap diem Chuyen Can (10%), Giua Ky (30%), Cuoi Ky (60%)
+   - Tu dong tinh tong ket va xep loai (A/B/C/D/F)
+   - Them, sua, xoa ban ghi diem
+
+6. Gio Hang (Session-based)
+   - Them san pham vao gio hang
+   - Cap nhat so luong
+   - Xoa san pham khoi gio hang
+   - Hien thi tong tien
+
+III. CONG NGHE SU DUNG
+----------------------------------------------------------------
+- Java 11+
+- Apache Tomcat 10
+- Maven (quan ly dependency)
+- Servlet API 5.0
+- JSTL 2.0
+- JSP / HTML / CSS (Inter font, Dark mode UI)
+
+IV. CAU TRUC THU MUC CHINH
+----------------------------------------------------------------
+lab07-crud-mvc/
+  src/main/
+    java/vn/edu/eaut/lab7/
+      controller/      <- Cac Servlet (Controller)
+      model/           <- Cac POJO (SinhVien, Sach, ...)
+      repository/      <- Xu ly du lieu in-memory
+    webapp/
+      css/style.css    <- Giao dien (dark mode, responsive)
+      views/           <- Cac trang JSP theo module
+        sinhvien/
+        sach/
+        sanpham/
+        lophoc/
+        diem/
+        cart/
+      index.jsp        <- Trang chu
+      login.jsp        <- Trang dang nhap
+
+V. GHI CHU
+----------------------------------------------------------------
+- Du lieu luu tru trong bo nho (List), khong su dung CSDL.
+- Giao dien duoc thiet ke theo phong cach dark mode hien dai.
+- Cac trang co breadcrumb, phan trang, va xac nhan truoc khi xoa.
+
+================================================================
+                        KET THUC BAO CAO
+================================================================
