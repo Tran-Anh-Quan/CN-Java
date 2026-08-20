@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition>
+    <div class="navbar">
+        <h:outputLink value="index.xhtml" styleClass="brand">
+            🚀 EAUT - Lab 08 JSF Framework
+        </h:outputLink>
+        <div class="nav-links">
+            <h:outputLink value="index.xhtml" styleClass="nav-btn">Trang Chủ</h:outputLink>
+            <h:outputLink value="sinhvien-list.xhtml" styleClass="nav-btn">Sinh Viên</h:outputLink>
+            <h:outputLink value="sach-list.xhtml" styleClass="nav-btn">Sách</h:outputLink>
+            <h:outputLink value="product-list.xhtml" styleClass="nav-btn">Sản Phẩm</h:outputLink>
+            
+            <h:panelGroup rendered="#{loginBean.loggedIn}">
+                <span style="color: var(--accent); font-size: 0.9rem; margin-right: 0.5rem;">
+                    👤 #{loginBean.userFullName}
+                </span>
+                <h:form style="display:inline;">
+                    <h:commandLink action="#{loginBean.logout()}" styleClass="nav-btn" style="background: rgba(239, 68, 68, 0.2); color: #fca5a5;">
+                        Đăng Xuất
+                    </h:commandLink>
+                </h:form>
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{!loginBean.loggedIn}">
+                <h:outputLink value="login.xhtml" styleClass="nav-btn primary">Đăng Nhập</h:outputLink>
+            </h:panelGroup>
+        </div>
+    </div>
+</ui:composition>
+</html>

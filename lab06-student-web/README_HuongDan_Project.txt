@@ -70,7 +70,7 @@ Yêu cầu hệ thống:
 
 Cách chạy sử dụng Maven Tomcat Plugin (đã được cấu hình trong pom.xml):
 - Bước 1: Mở Terminal / Command Prompt hoặc Terminal trong IDE (VSCode, IntelliJ, Eclipse) tại thư mục gốc của dự án (nơi chứa file pom.xml).
-- Bước 2: Chạy câu lệnh Maven sau để dọn dẹp và chạy server Tomcat:
+- Bước 2: Chạy câu lệnh Maven sau để dọn dẹp và chạy server Tomcat:`
       cd D:\Java\lab06-student-web
       mvn clean tomcat7:run
 - Bước 3: Đợi một lát cho Maven tải thư viện và khởi động Server Tomcat. Bạn sẽ thấy dòng "Starting Tomcat server on port: 8080".

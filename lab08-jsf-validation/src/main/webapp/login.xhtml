@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Đăng Nhập - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <div style="max-width: 440px; margin: 3rem auto;">
+            <div class="form-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.8rem; font-weight: 700; margin-bottom: 0.5rem;">🔐 Đăng Nhập Hệ Thống</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Nhập tài khoản admin / 123456 để truy cập</p>
+                </div>
+
+                <!-- Messages -->
+                <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+                <h:form id="loginForm">
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Tên Đăng Nhập</label>
+                            <h:inputText id="username" value="#{loginBean.username}" a:placeholder="Nhập 'admin'..." styleClass="form-control"/>
+                            <h:message for="username" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Mật Khẩu</label>
+                            <h:inputSecret id="password" value="#{loginBean.password}" a:placeholder="Nhập '123456'..." styleClass="form-control"/>
+                            <h:message for="password" styleClass="field-error"/>
+                        </div>
+
+                        <div style="margin-top: 1rem;">
+                            <h:commandButton value="🔑 Đăng Nhập" action="#{loginBean.login()}" styleClass="btn btn-primary" style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem;"/>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Trang Chủ - EAUT Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <!-- Global Messages -->
+        <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+        <div style="text-align: center; margin: 3rem 0 4rem;">
+            <span style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; border: 1px solid rgba(99, 102, 241, 0.3);">
+                ⚡ Apache Maven &amp; JavaServer Faces (JSF) 2.2 Framework
+            </span>
+            <h1 style="font-size: 3rem; font-weight: 800; margin: 1.25rem 0 0.75rem; background: linear-gradient(135deg, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                Hệ Thống Quản Lý Bài Tập Lab 08
+            </h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem; max-width: 650px; margin: 0 auto;">
+                Ứng dụng Java Web tích hợp JSF ManagedBeans, JSF UI Components, Bean Validation (JSR-380), và Facelets Templating Layout.
+            </p>
+        </div>
+
+        <!-- Modules Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <!-- Module 1: Sinh Viên -->
+            <div class="form-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🎓</div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Quản Lý Sinh Viên</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-size: 1.5; margin-bottom: 1.5rem;">
+                        Bài 1-5, 9-10, 12: Quản lý danh sách sinh viên bằng <code>h:dataTable</code>, validation form, <code>h:selectOneMenu</code> và tìm kiếm theo lớp.
+                    </p>
+                </div>
+                <h:outputLink value="sinhvien-list.xhtml" styleClass="btn btn-primary" style="justify-content: center;">Truy Cập Danh Sách</h:outputLink>
+            </div>
+
+            <!-- Module 2: Sách -->
+            <div class="form-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📚</div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Quản Lý Sách</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-size: 1.5; margin-bottom: 1.5rem;">
+                        Bài 6: Chuyển đổi form Sách sang JSF với validation Tên sách, Tác giả, và Năm xuất bản hợp lệ.
+                    </p>
+                </div>
+                <h:outputLink value="sach-list.xhtml" styleClass="btn btn-primary" style="justify-content: center;">Truy Cập Quản Lý Sách</h:outputLink>
+            </div>
+
+            <!-- Module 3: Sản Phẩm -->
+            <div class="form-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">📦</div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Quản Lý Sản Phẩm</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-size: 1.5; margin-bottom: 1.5rem;">
+                        Bài 7: Chuyển đổi form Sản phẩm sang JSF với validation Giá &gt; 0 và Số lượng &gt;= 0.
+                    </p>
+                </div>
+                <h:outputLink value="product-list.xhtml" styleClass="btn btn-primary" style="justify-content: center;">Truy Cập Sản Phẩm</h:outputLink>
+            </div>
+
+            <!-- Module 4: Đăng Nhập -->
+            <div class="form-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">🔐</div>
+                    <h3 style="font-size: 1.3rem; margin-bottom: 0.5rem;">Đăng Nhập JSF</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; line-size: 1.5; margin-bottom: 1.5rem;">
+                        Bài 8: Form đăng nhập xác thực tài khoản với <code>FacesMessage</code> và điều hướng trang tự động.
+                    </p>
+                </div>
+                <h:outputLink value="login.xhtml" styleClass="btn btn-primary" style="justify-content: center;">Truy Cập Form Đăng Nhập</h:outputLink>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

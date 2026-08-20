@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">#{productBean.editMode ? 'Cập Nhật Sản Phẩm' : 'Thêm Sản Phẩm Mới'} - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <div style="max-width: 700px; margin: 0 auto;">
+            <div class="form-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2>#{productBean.editMode ? '✏️ Cập Nhật Sản Phẩm' : '📦 Thêm Sản Phẩm Mới'}</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Validate: Tên không rỗng, Giá &gt; 0, Số lượng &gt;= 0</p>
+                </div>
+
+                <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+                <h:form id="productForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Mã Sản Phẩm *</label>
+                            <h:inputText id="id" value="#{productBean.product.id}" disabled="#{productBean.editMode}" a:placeholder="VD: SP004" styleClass="form-control"/>
+                            <h:message for="id" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Tên Sản Phẩm *</label>
+                            <h:inputText id="name" value="#{productBean.product.name}" a:placeholder="VD: Tai nghe Sony WH-1000XM5" styleClass="form-control"/>
+                            <h:message for="name" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Giá Sản Phẩm (&gt; 0) *</label>
+                            <h:inputText id="price" value="#{productBean.product.price}" a:placeholder="VD: 8500000" styleClass="form-control"/>
+                            <h:message for="price" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Số Lượng (&gt;= 0) *</label>
+                            <h:inputText id="quantity" value="#{productBean.product.quantity}" a:placeholder="VD: 50" styleClass="form-control"/>
+                            <h:message for="quantity" styleClass="field-error"/>
+                        </div>
+
+                        <div style="grid-column: span 2;">
+                            <label style="font-size: 0.9rem; font-weight: 600;">Danh Mục Sản Phẩm *</label>
+                            <h:selectOneMenu id="category" value="#{productBean.product.category}" styleClass="form-control">
+                                <f:selectItem itemValue="" itemLabel="-- Chọn Danh Mục --"/>
+                                <f:selectItem itemValue="Điện tử &amp; Máy tính" itemLabel="Điện tử &amp; Máy tính"/>
+                                <f:selectItem itemValue="Phụ kiện máy tính" itemLabel="Phụ kiện máy tính"/>
+                                <f:selectItem itemValue="Thiết bị di động" itemLabel="Thiết bị di động"/>
+                                <f:selectItem itemValue="Gia dụng thông minh" itemLabel="Gia dụng thông minh"/>
+                            </h:selectOneMenu>
+                            <h:message for="category" styleClass="field-error"/>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                        <h:commandButton value="❌ Hủy" action="#{productBean.cancel()}" immediate="true" styleClass="btn btn-secondary"/>
+                        <h:commandButton value="#{productBean.editMode ? '💾 Cập Nhật' : '➕ Thêm Sản Phẩm'}" action="#{productBean.save()}" styleClass="btn btn-primary"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

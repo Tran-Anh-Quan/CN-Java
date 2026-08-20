@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Danh Sách Sách - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+                <h2>📚 Quản Lý Danh Sách Sách</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Danh sách các đầu sách công nghệ và khoa học</p>
+            </div>
+            <h:form style="display:inline;">
+                <h:commandLink action="#{sachBean.prepareAdd()}" styleClass="btn btn-primary">➕ Thêm Sách Mới</h:commandLink>
+            </h:form>
+        </div>
+
+        <div class="table-card">
+            <h:form id="sachListForm">
+                <h:dataTable value="#{sachBean.danhSachSach}" var="s" styleClass="data-table" style="width: 100%; border-collapse: collapse;">
+                    <h:column>
+                        <f:facet name="header">Mã Sách</f:facet>
+                        <strong style="color: var(--accent);">#{s.maSach}</strong>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Tên Sách</f:facet>
+                        #{s.tenSach}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Tác Giả</f:facet>
+                        #{s.tacGia}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Năm XB</f:facet>
+                        #{s.namXuatBan}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Giá Bán</f:facet>
+                        <h:outputText value="#{s.giaBan}">
+                            <f:convertNumber type="currency" currencySymbol="VNĐ" locale="vi_VN"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Thể Loại</f:facet>
+                        #{s.theLoai}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Thao Tác</f:facet>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <h:commandLink action="#{sachBean.prepareEdit(s.maSach)}" styleClass="btn btn-warning">✏️ Sửa</h:commandLink>
+                            <h:commandLink action="#{sachBean.delete(s.maSach)}" onclick="return confirm('Bạn có muốn xóa sách này?');" styleClass="btn btn-danger">🗑️ Xóa</h:commandLink>
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

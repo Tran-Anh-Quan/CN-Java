@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">#{sinhVienBean.editMode ? 'Sửa Sinh Viên' : 'Thêm Sinh Viên Mới'} - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="form-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2>#{sinhVienBean.editMode ? '✏️ Sửa Thông Tin Sinh Viên' : '🎓 Thêm Sinh Viên Mới'}</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Form JSF hỗ trợ Bean Validation (JSR-380) &amp; h:selectOneMenu</p>
+                </div>
+
+                <!-- Alert Messages -->
+                <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+                <h:form id="sinhVienForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <!-- Mã SV -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Mã Sinh Viên *</label>
+                            <h:inputText id="maSV" value="#{sinhVienBean.sinhVien.maSV}" disabled="#{sinhVienBean.editMode}" a:placeholder="VD: SV005" styleClass="form-control"/>
+                            <h:message for="maSV" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Họ và Tên -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Họ và Tên *</label>
+                            <h:inputText id="hoTen" value="#{sinhVienBean.sinhVien.hoTen}" a:placeholder="VD: Nguyễn Văn Anh" styleClass="form-control"/>
+                            <h:message for="hoTen" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Email -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Email *</label>
+                            <h:inputText id="email" value="#{sinhVienBean.sinhVien.email}" a:placeholder="VD: anh.nguyen@eaut.edu.vn" styleClass="form-control"/>
+                            <h:message for="email" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Số điện thoại -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Số Điện Thoại *</label>
+                            <h:inputText id="soDienThoai" value="#{sinhVienBean.sinhVien.soDienThoai}" a:placeholder="VD: 0912345678" styleClass="form-control"/>
+                            <h:message for="soDienThoai" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Điểm TB -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Điểm Trung Bình (0 - 10) *</label>
+                            <h:inputText id="diemTB" value="#{sinhVienBean.sinhVien.diemTB}" a:placeholder="VD: 8.5" styleClass="form-control"/>
+                            <h:message for="diemTB" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Lớp Học (Bài 12: Sử dụng h:selectOneMenu) -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Lớp Học (h:selectOneMenu) *</label>
+                            <h:selectOneMenu id="lopHoc" value="#{sinhVienBean.sinhVien.lopHoc}" styleClass="form-control">
+                                <f:selectItem itemValue="" itemLabel="-- Chọn Lớp Học --"/>
+                                <f:selectItem itemValue="DCNTT14-01" itemLabel="DCNTT14-01 (CNTT K14-01)"/>
+                                <f:selectItem itemValue="DCNTT14-02" itemLabel="DCNTT14-02 (CNTT K14-02)"/>
+                                <f:selectItem itemValue="DKHMT14-01" itemLabel="DKHMT14-01 (Khoa học máy tính)"/>
+                                <f:selectItem itemValue="DKTPM14-01" itemLabel="DKTPM14-01 (Kỹ thuật phần mềm)"/>
+                            </h:selectOneMenu>
+                            <h:message for="lopHoc" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Chuyên ngành -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Chuyên Ngành *</label>
+                            <h:selectOneMenu id="chuyenNganh" value="#{sinhVienBean.sinhVien.chuyenNganh}" styleClass="form-control">
+                                <f:selectItem itemValue="" itemLabel="-- Chọn Chuyên Ngành --"/>
+                                <f:selectItem itemValue="Công nghệ thông tin" itemLabel="Công nghệ thông tin"/>
+                                <f:selectItem itemValue="Khoa học máy tính" itemLabel="Khoa học máy tính"/>
+                                <f:selectItem itemValue="Hệ thống thông tin" itemLabel="Hệ thống thông tin"/>
+                                <f:selectItem itemValue="Kỹ thuật phần mềm" itemLabel="Kỹ thuật phần mềm"/>
+                            </h:selectOneMenu>
+                            <h:message for="chuyenNganh" styleClass="field-error"/>
+                        </div>
+
+                        <!-- Giới tính -->
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Giới Tính *</label>
+                            <h:selectOneRadio id="gioiTinh" value="#{sinhVienBean.sinhVien.gioiTinh}" styleClass="radio-group" style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+                                <f:selectItem itemValue="Nam" itemLabel="Nam"/>
+                                <f:selectItem itemValue="Nữ" itemLabel="Nữ"/>
+                            </h:selectOneRadio>
+                            <h:message for="gioiTinh" styleClass="field-error"/>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                        <h:commandButton value="❌ Hủy Bỏ" action="#{sinhVienBean.cancel()}" immediate="true" styleClass="btn btn-secondary"/>
+                        <h:commandButton value="#{sinhVienBean.editMode ? '💾 Cập Nhật' : '➕ Lưu Sinh Viên'}" action="#{sinhVienBean.save()}" styleClass="btn btn-primary"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

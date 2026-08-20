@@ -22,6 +22,7 @@ public class SinhVienServlet extends HttpServlet {
 
         switch (action) {
             case "new":
+            case "add":
                 req.getRequestDispatcher("/views/sinhvien/form.jsp").forward(req, resp);
                 break;
             case "edit":
@@ -46,7 +47,9 @@ public class SinhVienServlet extends HttpServlet {
                 int page = 1;
                 int pageSize = 5;
                 if (req.getParameter("page") != null) {
-                    page = Integer.parseInt(req.getParameter("page"));
+                    try {
+                        page = Integer.parseInt(req.getParameter("page"));
+                    } catch (NumberFormatException ignored) {}
                 }
                 List<SinhVien> list = repository.findAll(page, pageSize);
                 int totalPages = repository.getTotalPages(pageSize);
@@ -62,15 +65,15 @@ public class SinhVienServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String action = req.getParameter("action");
-        
         String id = req.getParameter("id");
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String className = req.getParameter("className");
 
-        SinhVien sv = new SinhVien(id, name, email, className);
-        repository.save(sv);
+        if (id != null && !id.trim().isEmpty()) {
+            SinhVien sv = new SinhVien(id.trim(), name, email, className);
+            repository.save(sv);
+        }
 
         resp.sendRedirect(req.getContextPath() + "/admin/sinhvien");
     }

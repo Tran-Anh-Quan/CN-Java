@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Danh Sách Sản Phẩm - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <div>
+                <h2>📦 Quản Lý Sản Phẩm</h2>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Danh sách các sản phẩm và thiết bị điện tử</p>
+            </div>
+            <h:form style="display:inline;">
+                <h:commandLink action="#{productBean.prepareAdd()}" styleClass="btn btn-primary">➕ Thêm Sản Phẩm Mới</h:commandLink>
+            </h:form>
+        </div>
+
+        <div class="table-card">
+            <h:form id="productListForm">
+                <h:dataTable value="#{productBean.productList}" var="p" styleClass="data-table" style="width: 100%; border-collapse: collapse;">
+                    <h:column>
+                        <f:facet name="header">Mã SP</f:facet>
+                        <strong style="color: var(--accent);">#{p.id}</strong>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Tên Sản Phẩm</f:facet>
+                        #{p.name}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Giá Bán</f:facet>
+                        <h:outputText value="#{p.price}">
+                            <f:convertNumber type="currency" currencySymbol="VNĐ" locale="vi_VN"/>
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Số Lượng</f:facet>
+                        #{p.quantity}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Danh Mục</f:facet>
+                        #{p.category}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Thao Tác</f:facet>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <h:commandLink action="#{productBean.prepareEdit(p.id)}" styleClass="btn btn-warning">✏️ Sửa</h:commandLink>
+                            <h:commandLink action="#{productBean.delete(p.id)}" onclick="return confirm('Bạn có muốn xóa sản phẩm này?');" styleClass="btn btn-danger">🗑️ Xóa</h:commandLink>
+                        </div>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

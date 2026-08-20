@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">#{sachBean.editMode ? 'Cập Nhật Sách' : 'Thêm Sách Mới'} - Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <div style="max-width: 700px; margin: 0 auto;">
+            <div class="form-card">
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <h2>#{sachBean.editMode ? '✏️ Cập Nhật Thông Tin Sách' : '📚 Thêm Mới Sách'}</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Form quản lý sách tích hợp validation tiêu đề, tác giả &amp; năm xuất bản</p>
+                </div>
+
+                <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+                <h:form id="sachForm">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Mã Sách *</label>
+                            <h:inputText id="maSach" value="#{sachBean.sach.maSach}" disabled="#{sachBean.editMode}" a:placeholder="VD: MS004" styleClass="form-control"/>
+                            <h:message for="maSach" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Tên Sách *</label>
+                            <h:inputText id="tenSach" value="#{sachBean.sach.tenSach}" a:placeholder="VD: Lập Trình Python" styleClass="form-control"/>
+                            <h:message for="tenSach" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Tác Giả *</label>
+                            <h:inputText id="tacGia" value="#{sachBean.sach.tacGia}" a:placeholder="VD: Nguyễn Văn A" styleClass="form-control"/>
+                            <h:message for="tacGia" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Năm Xuất Bản (1800 - 2026) *</label>
+                            <h:inputText id="namXuatBan" value="#{sachBean.sach.namXuatBan}" a:placeholder="VD: 2024" styleClass="form-control"/>
+                            <h:message for="namXuatBan" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Giá Bán (VNĐ) *</label>
+                            <h:inputText id="giaBan" value="#{sachBean.sach.giaBan}" a:placeholder="VD: 120000" styleClass="form-control"/>
+                            <h:message for="giaBan" styleClass="field-error"/>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.9rem; font-weight: 600;">Thể Loại *</label>
+                            <h:selectOneMenu id="theLoai" value="#{sachBean.sach.theLoai}" styleClass="form-control">
+                                <f:selectItem itemValue="" itemLabel="-- Chọn thể loại --"/>
+                                <f:selectItem itemValue="Công nghệ thông tin" itemLabel="Công nghệ thông tin"/>
+                                <f:selectItem itemValue="Lập trình Web" itemLabel="Lập trình Web"/>
+                                <f:selectItem itemValue="Kinh tế - Kỹ năng" itemLabel="Kinh tế - Kỹ năng"/>
+                                <f:selectItem itemValue="Khoa học kỹ thuật" itemLabel="Khoa học kỹ thuật"/>
+                            </h:selectOneMenu>
+                            <h:message for="theLoai" styleClass="field-error"/>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
+                        <h:commandButton value="❌ Hủy" action="#{sachBean.cancel()}" immediate="true" styleClass="btn btn-secondary"/>
+                        <h:commandButton value="#{sachBean.editMode ? '💾 Cập Nhật' : '➕ Thêm Sách'}" action="#{sachBean.save()}" styleClass="btn btn-primary"/>
+                    </div>
+                </h:form>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

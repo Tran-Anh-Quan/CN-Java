@@ -1,0 +1,67 @@
+================================================================================
+                    BÁO CÁO KẾT QUẢ BÀI THỰC HÀNH LAB 08
+                  MÔN HỌC: CÔNG NGHỆ JAVA (MÃ HP: IT3242)
+  Chủ đề: Phát triển ứng dụng Web với JavaServer Faces (JSF) & Bean Validation
+================================================================================
+
+I. THÔNG TIN CHUNG
+--------------------------------------------------------------------------------
+- Tên dự án: lab08-jsf-validation
+- Kiến trúc: Component-based MVC (JavaServer Faces 2.2 + Bean Validation JSR-380)
+- Công nghệ & Thư viện:
+  + Java version: 11
+  + Framework UI: JSF 2.2.20 (Mojarra)
+  + Validation: Hibernate Validator 6.2.5.Final
+  + Build Tool: Apache Maven (WAR packaging)
+  + Web Server: Tomcat 7 Maven Plugin (chạy trên port 8088)
+
+II. TÓM TẮT NỘI DUNG THỰC HIỆN (BÀI 1 ĐẾN BÀI 13)
+--------------------------------------------------------------------------------
+1. Bài 1 - Bài 5: Xây dựng Module Quản lý Sinh viên cơ bản
+   - Khởi tạo ứng dụng JSF với trang `index.xhtml` và cấu hình `FacesServlet` trong `web.xml`.
+   - Xây dựng Model `SinhVien` và `SinhVienRepository` lưu trữ dữ liệu trong bộ nhớ (In-memory List).
+   - Tạo `SinhVienBean` (@ManagedBean, @SessionScoped) tiếp nhận dữ liệu form và xử lý nghiệp vụ.
+   - Xây dựng form JSF tích hợp Bean Validation JSR-380 (@NotBlank, @Email, @Pattern, @Min, @Max).
+   - Hiển thị danh sách sinh viên bằng thẻ `<h:dataTable>` và tính năng xóa trực tiếp.
+
+2. Bài 6: Chuyển đổi Form Sách sang JSF
+   - Tạo Model `Sach`, `SachRepository`, `SachBean` và 2 trang `sach-form.xhtml`, `sach-list.xhtml`.
+   - Thêm Validation: Tên sách không rỗng, Tác giả không rỗng, Năm xuất bản hợp lệ (1800 - 2026).
+
+3. Bài 7: Chuyển đổi Form Sản phẩm sang JSF
+   - Tạo Model `Product`, `ProductRepository`, `ProductBean` và 2 trang `product-form.xhtml`, `product-list.xhtml`.
+   - Thêm Validation: Tên sản phẩm không rỗng, Giá bán > 0 (@DecimalMin), Số lượng >= 0 (@Min).
+
+4. Bài 8: Form Đăng nhập JSF
+   - Tạo `LoginBean` quản lý phiên đăng nhập và trang `login.xhtml`.
+   - Xác thực tài khoản (admin/123456), bắn thông báo lỗi qua `FacesMessage` và chuyển hướng trang.
+
+5. Bài 9: Bổ sung chức năng Sửa Sinh viên bằng JSF
+   - Thêm nút Sửa trên bảng danh sách, đưa dữ liệu sinh viên cần sửa lên form (chế độ Edit).
+   - Khóa ô nhập Mã sinh viên khi sửa và cập nhật lại danh sách sau khi lưu.
+
+6. Bài 10: Tìm kiếm Sinh viên bằng JSF
+   - Thêm ô nhập từ khóa tìm kiếm trên `sinhvien-list.xhtml`.
+   - Lọc danh sách sinh viên theo Họ tên hoặc Lớp học.
+
+7. Bài 11: Tạo Layout Dùng Chung (Facelets Templating)
+   - Xây dựng hệ thống layout chung tại `WEB-INF/templates/`: `header.xhtml`, `footer.xhtml`, `layout.xhtml`.
+   - Sử dụng `<ui:composition>`, `<ui:include>`, `<ui:insert>` để tái sử dụng giao diện trên toàn bộ các trang.
+
+8. Bài 12: Sử dụng `<h:selectOneMenu>`
+   - Chuyển đổi trường Lớp học trong `sinhvien-form.xhtml` từ ô nhập văn bản sang thẻ `<h:selectOneMenu>` với các tùy chọn lớp học chuẩn (`DCNTT14-01`, `DCNTT14-02`,...).
+
+9. Bài 13: Báo cáo So sánh Servlet/JSP (Lab 7) vs. JSF (Lab 8)
+   - Lập bảng so sánh chi tiết giữa MVC thủ công (Servlet/JSP) và Component-based MVC (JSF) về:
+     + Quy trình xử lý form (Binding tự động vs. Parameter thủ công).
+     + Validation (Bean Validation JSR-380 vs. if-else thủ công).
+     + Hiển thị thông báo (<h:message> vs. JSTL request attribute).
+     + Điều hướng trang (Outcome string vs. RequestDispatcher/sendRedirect).
+     + Mức độ tách mã (Tách biệt tuyệt độc View & Bean vs. Trộn lẫn Java/HTML).
+
+III. KẾT QUẢ ĐẠT ĐƯỢC
+--------------------------------------------------------------------------------
+- Ứng dụng biên dịch và đóng gói WAR thành công bằng Apache Maven (`BUILD SUCCESS`).
+- Ứng dụng vận hành ổn định trên Tomcat Server tại URL: http://localhost:8088/lab08
+- Giao diện được thiết kế hiện đại (Chủ đề tối Glassmorphic, Badge trạng thái, Responsive).
+- Đã hoàn thành 100% các yêu cầu từ Bài 1 đến Bài 13 của Lab 08.
