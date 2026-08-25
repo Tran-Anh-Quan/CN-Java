@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.1"
+             xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+             https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
+             
+    <persistence-unit name="lab09-pu" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <class>vn.edu.eaut.lab9.model.SinhVien</class>
+        <class>vn.edu.eaut.lab9.model.LopHoc</class>
+        <class>vn.edu.eaut.lab9.model.MonHoc</class>
+        <class>vn.edu.eaut.lab9.model.Diem</class>
+        <class>vn.edu.eaut.lab9.model.Sach</class>
+        <class>vn.edu.eaut.lab9.model.SanPham</class>
+        
+        <properties>
+            <!-- Database connection properties -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/lab09_db?useSSL=false&amp;serverTimezone=UTC&amp;characterEncoding=UTF-8" />
+            <property name="jakarta.persistence.jdbc.user" value="root" />
+            <property name="jakarta.persistence.jdbc.password" value="123456" />
+            
+            <!-- Hibernate properties -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>

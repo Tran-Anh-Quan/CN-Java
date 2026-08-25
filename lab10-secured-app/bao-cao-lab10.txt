@@ -1,0 +1,110 @@
+BÁO CÁO LAB 10 - ỨNG DỤNG WEB BẢO MẬT
+
+1. Thông tin chung
+- Tên đề tài: Lab 10 - Secured Web Application
+- Mục tiêu: Xây dựng ứng dụng web Java Servlet/JSP với xác thực và phân quyền người dùng theo vai trò (RBAC), bảo vệ các trang và chức năng theo role.
+- Công nghệ sử dụng:
+  + Java 17
+  + Jakarta Servlet / JSP
+  + Maven
+  + JPA/Hibernate
+  + MySQL
+  + BCrypt cho mã hóa mật khẩu
+  + Tomcat 10
+
+2. Mô tả bài toán
+Ứng dụng cho phép người dùng:
+- Đăng nhập, đăng ký tài khoản
+- Truy cập các trang theo role
+- Quản lý thông tin cá nhân
+- Quản lý tài khoản người dùng (Admin)
+- Theo dõi nhật ký hoạt động của hệ thống
+
+Hệ thống cần bảo vệ các URL quan trọng như:
+- /admin/* chỉ cho ROLE_ADMIN
+- /staff/* cho ROLE_ADMIN hoặc ROLE_STAFF
+- /user/* cho người dùng đã đăng nhập
+- /dashboard cho người dùng đã đăng nhập
+
+3. Cấu trúc dự án
+- src/main/java/vn/edu/eaut/lab10/config: cấu hình JPA, thiết lập kết nối
+- src/main/java/vn/edu/eaut/lab10/controller: xử lý request điều hướng
+- src/main/java/vn/edu/eaut/lab10/filter: AuthenticationFilter, AuthorizationFilter
+- src/main/java/vn/edu/eaut/lab10/model: model dữ liệu User, Role, AuditLog
+- src/main/java/vn/edu/eaut/lab10/repository: truy vấn dữ liệu
+- src/main/java/vn/edu/eaut/lab10/service: logic nghiệp vụ
+- src/main/webapp: JSP giao diện
+
+4. Chức năng chính
+4.1. Xác thực người dùng
+- Người dùng nhập username/password
+- Hệ thống kiểm tra thông tin và xác thực qua AuthService
+- Mật khẩu được mã hóa bằng BCrypt và so sánh an toàn
+- Session lưu thông tin currentUser
+
+4.2. Phân quyền (Authorization)
+- AuthenticationFilter: kiểm tra người dùng đã đăng nhập chưa, nếu chưa thì redirect về /login
+- AuthorizationFilter: kiểm tra quyền truy cập theo role trên từng đường dẫn
+- Ví dụ:
+  + admin: ROLE_ADMIN
+  + staff: ROLE_ADMIN, ROLE_STAFF
+  + user: tài khoản hợp lệ đã đăng nhập
+
+4.3. Quản lý người dùng
+- Admin xem danh sách người dùng
+- Tìm kiếm theo từ khóa
+- Kích hoạt/khóa tài khoản
+- Chỉnh sửa thông tin người dùng
+- Ghi log hành động vào AuditLog
+
+4.4. Hồ sơ cá nhân
+- Người dùng xem thông tin cá nhân
+- Cập nhật họ tên, email
+- Đổi mật khẩu
+- Xem lịch sử hoạt động cá nhân
+
+5. Cơ chế bảo mật được triển khai
+- Kiểm tra session trước khi vào các trang yêu cầu đăng nhập
+- Gửi redirect về trang login nếu chưa xác thực
+- Từ chối truy cập bằng 403 nếu không đủ quyền
+- Mã hóa mật khẩu bằng BCrypt
+- Chặn truy cập trái phép qua đường dẫn không hợp lệ
+- Ghi log các hành động login, logout, thay đổi trạng thái, chỉnh sửa user
+
+6. Quy trình hoạt động
+- Người dùng truy cập đường dẫn cần bảo vệ
+- AuthenticationFilter kiểm tra session
+- Nếu chưa đăng nhập: lưu redirectUrl và chuyển đến login
+- Sau khi đăng nhập: hệ thống trả về URL cần truy cập ban đầu
+- AuthorizationFilter kiểm tra role dựa trên URL
+- Nếu không đủ quyền: forward đến /error/403.jsp
+- Nếu đủ quyền: cho phép tiếp tục xử lý request
+
+7. Kết quả đạt được
+- Ứng dụng có cơ chế đăng nhập và phân quyền rõ ràng
+- Mỗi vai trò truy cập đúng khu vực phân quyền
+- Hệ thống có khả năng quản lý người dùng và ghi nhật ký
+- Cài đặt bảo mật ở tầng filter giúp kiểm soát tập trung và dễ mở rộng
+
+8. Hạn chế và hướng phát triển
+- Các thao tác quản trị còn phụ thuộc nhiều vào logic servlet và JSP
+- Có thể nâng cấp bằng Spring Security để quản lý bảo mật chuyên nghiệp hơn
+- Nên thêm validation dữ liệu, CSRF protection, password policy, audit log chi tiết hơn
+- Có thể chuyển sang REST API để dễ tích hợp với frontend hiện đại
+
+9. Hướng dẫn chạy dự án
+1. Cài đặt MySQL và tạo database theo schema.sql
+2. Cấu hình username/password trong persistence.xml hoặc file cấu hình liên quan
+3. Chạy lệnh Maven:
+   mvn clean package
+4. Deploy lên Tomcat hoặc chạy Cargo plugin
+5. Truy cập:
+   http://localhost:8080/lab10/login
+
+10. Kết luận
+Lab 10 đã xây dựng được một ứng dụng web Java Servlet/JSP có tính bảo mật tương đối tốt với các thành phần chính: xác thực, phân quyền, quản lý người dùng và nhật ký hoạt động. Đây là nền tảng quan trọng để tiếp tục phát triển các ứng dụng web an toàn hơn trong thực tế.
+
+Người viết báo cáo: [Tên sinh viên]
+Lớp: [Tên lớp]
+Mã môn: [Tên môn]
+Ngày: 25/08/2026

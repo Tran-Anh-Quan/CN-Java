@@ -1,0 +1,30 @@
+BÁO CÁO THỰC HÀNH LAB 09
+Chủ đề: Xây dựng Java JPA Repository
+
+1. Mục tiêu bài thực hành:
+- Nắm vững kiến thức và thực hành xây dựng ứng dụng Java Web sử dụng JPA/Hibernate và Jakarta EE.
+- Áp dụng mô hình Repository (Repository Pattern) với thiết kế BaseRepository dạng Generic để tối ưu hóa việc quản lý các thao tác tương tác cơ sở dữ liệu (CRUD).
+- Hiểu và cài đặt các mối quan hệ thực thể (Entity Relationships) trong JPA.
+- Áp dụng JPQL (Java Persistence Query Language) để thực hiện các truy vấn phức tạp như tìm kiếm, tính toán và phân trang.
+
+2. Nội dung và các tính năng đã triển khai:
+- Tạo và ánh xạ các Entity: Student, Class, Subject, và Grade.
+- Thiết lập các mối quan hệ giữa các Entity:
+  + Sinh viên - Lớp học (Many-to-One)
+  + Sinh viên - Điểm số - Môn học
+- Xây dựng lớp Generic BaseRepository<T, ID> cung cấp các hàm dùng chung: lưu, cập nhật, xóa, tìm kiếm theo ID và lấy danh sách.
+- Sử dụng JPQL để thực hiện các tính năng:
+  + Tìm kiếm sinh viên.
+  + Tính toán điểm trung bình (GPA) tự động.
+- Áp dụng Validation để kiểm tra tính hợp lệ của dữ liệu đầu vào và sử dụng Transaction Management để đảm bảo tính toàn vẹn dữ liệu.
+- Cấu hình pom.xml và sử dụng Maven Cargo plugin để hỗ trợ deploy ứng dụng tiện lợi trên local server (Tomcat/Jetty).
+
+3. Công nghệ và công cụ sử dụng:
+- Ngôn ngữ lập trình: Java
+- Java EE/Jakarta EE, JPA (Java Persistence API), Hibernate (JPA Provider).
+- Quản lý dự án và Dependencies: Maven (Maven Cargo plugin).
+- Cơ sở dữ liệu: MySQL/H2 (Theo cấu hình trong persistence.xml).
+
+4. Kết luận:
+- Hoàn thành đầy đủ các yêu cầu của bài Lab 09.
+- Ứng dụng chạy ổn định, thao tác với database chính xác, cấu trúc mã nguồn gọn gàng dễ bảo trì.

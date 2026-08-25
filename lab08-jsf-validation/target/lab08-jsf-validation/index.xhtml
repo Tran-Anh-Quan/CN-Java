@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">Trang Chủ - EAUT Lab 08 JSF</ui:define>
+
+    <ui:define name="content">
+        <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
+
+        <div style="text-align: center; margin: 2.5rem 0 3rem;">
+            <h:outputText value="Apache Maven &amp; JavaServer Faces (JSF) 2.2 Framework"
+                style="display: inline-block; background: #dbeafe; color: #1e40af; padding: 0.35rem 0.875rem; border-radius: 50px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem;"/>
+            <h1 style="font-size: 2.25rem; font-weight: 700; margin-bottom: 0.75rem; color: #111827;">
+                Hệ Thống Quản Lý Bài Tập Lab 08
+            </h1>
+            <p style="color: #6b7280; font-size: 1rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">
+                Ứng dụng Java Web tích hợp JSF ManagedBeans, JSF UI Components, Bean Validation (JSR-380), và Facelets Templating Layout.
+            </p>
+        </div>
+
+        <div class="modules-grid">
+            <div class="module-card">
+                <h3 class="module-title">Quản Lý Sinh Viên</h3>
+                <p class="module-desc">
+                    Bài 1-5, 9-10, 12: Quản lý danh sách sinh viên bằng h:dataTable, validation form, h:selectOneMenu và tìm kiếm theo lớp.
+                </p>
+                <h:outputLink value="sinhvien-list.xhtml" styleClass="btn btn-primary">Truy Cập Danh Sách</h:outputLink>
+            </div>
+
+            <div class="module-card">
+                <h3 class="module-title">Quản Lý Sách</h3>
+                <p class="module-desc">
+                    Bài 6: Chuyển đổi form Sách sang JSF với validation Tên sách, Tác giả, và Năm xuất bản hợp lệ.
+                </p>
+                <h:outputLink value="sach-list.xhtml" styleClass="btn btn-primary">Truy Cập Quản Lý Sách</h:outputLink>
+            </div>
+
+            <div class="module-card">
+                <h3 class="module-title">Quản Lý Sản Phẩm</h3>
+                <p class="module-desc">
+                    Bài 7: Chuyển đổi form Sản phẩm sang JSF với validation Giá > 0 và Số lượng >= 0.
+                </p>
+                <h:outputLink value="product-list.xhtml" styleClass="btn btn-primary">Truy Cập Sản Phẩm</h:outputLink>
+            </div>
+
+            <div class="module-card">
+                <h3 class="module-title">Đăng Nhập JSF</h3>
+                <p class="module-desc">
+                    Bài 8: Form đăng nhập xác thực tài khoản với FacesMessage và điều hướng trang tự động.
+                </p>
+                <h:outputLink value="login.xhtml" styleClass="btn btn-primary">Truy Cập Form Đăng Nhập</h:outputLink>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
+</html>

@@ -12,53 +12,48 @@
         <div style="max-width: 800px; margin: 0 auto;">
             <div class="form-card">
                 <div style="text-align: center; margin-bottom: 2rem;">
-                    <h2>#{sinhVienBean.editMode ? '✏️ Sửa Thông Tin Sinh Viên' : '🎓 Thêm Sinh Viên Mới'}</h2>
-                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Form JSF hỗ trợ Bean Validation (JSR-380) &amp; h:selectOneMenu</p>
+                    <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; color: #111827;">
+                        #{sinhVienBean.editMode ? 'Sửa Thông Tin Sinh Viên' : 'Thêm Sinh Viên Mới'}
+                    </h2>
+                    <p style="color: #6b7280; font-size: 0.9rem;">Form JSF hỗ trợ Bean Validation (JSR-380) &amp; h:selectOneMenu</p>
                 </div>
 
-                <!-- Alert Messages -->
                 <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
 
                 <h:form id="sinhVienForm">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-                        <!-- Mã SV -->
+                    <div class="form-grid">
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Mã Sinh Viên *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Mã Sinh Viên *</label>
                             <h:inputText id="maSV" value="#{sinhVienBean.sinhVien.maSV}" disabled="#{sinhVienBean.editMode}" a:placeholder="VD: SV005" styleClass="form-control"/>
                             <h:message for="maSV" styleClass="field-error"/>
                         </div>
 
-                        <!-- Họ và Tên -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Họ và Tên *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Họ và Tên *</label>
                             <h:inputText id="hoTen" value="#{sinhVienBean.sinhVien.hoTen}" a:placeholder="VD: Nguyễn Văn Anh" styleClass="form-control"/>
                             <h:message for="hoTen" styleClass="field-error"/>
                         </div>
 
-                        <!-- Email -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Email *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Email *</label>
                             <h:inputText id="email" value="#{sinhVienBean.sinhVien.email}" a:placeholder="VD: anh.nguyen@eaut.edu.vn" styleClass="form-control"/>
                             <h:message for="email" styleClass="field-error"/>
                         </div>
 
-                        <!-- Số điện thoại -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Số Điện Thoại *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Số Điện Thoại *</label>
                             <h:inputText id="soDienThoai" value="#{sinhVienBean.sinhVien.soDienThoai}" a:placeholder="VD: 0912345678" styleClass="form-control"/>
                             <h:message for="soDienThoai" styleClass="field-error"/>
                         </div>
 
-                        <!-- Điểm TB -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Điểm Trung Bình (0 - 10) *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Điểm Trung Bình (0 - 10) *</label>
                             <h:inputText id="diemTB" value="#{sinhVienBean.sinhVien.diemTB}" a:placeholder="VD: 8.5" styleClass="form-control"/>
                             <h:message for="diemTB" styleClass="field-error"/>
                         </div>
 
-                        <!-- Lớp Học (Bài 12: Sử dụng h:selectOneMenu) -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Lớp Học (h:selectOneMenu) *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Lớp Học *</label>
                             <h:selectOneMenu id="lopHoc" value="#{sinhVienBean.sinhVien.lopHoc}" styleClass="form-control">
                                 <f:selectItem itemValue="" itemLabel="-- Chọn Lớp Học --"/>
                                 <f:selectItem itemValue="DCNTT14-01" itemLabel="DCNTT14-01 (CNTT K14-01)"/>
@@ -69,9 +64,8 @@
                             <h:message for="lopHoc" styleClass="field-error"/>
                         </div>
 
-                        <!-- Chuyên ngành -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Chuyên Ngành *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Chuyên Ngành *</label>
                             <h:selectOneMenu id="chuyenNganh" value="#{sinhVienBean.sinhVien.chuyenNganh}" styleClass="form-control">
                                 <f:selectItem itemValue="" itemLabel="-- Chọn Chuyên Ngành --"/>
                                 <f:selectItem itemValue="Công nghệ thông tin" itemLabel="Công nghệ thông tin"/>
@@ -82,9 +76,8 @@
                             <h:message for="chuyenNganh" styleClass="field-error"/>
                         </div>
 
-                        <!-- Giới tính -->
                         <div>
-                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem;">Giới Tính *</label>
+                            <label style="font-size: 0.9rem; font-weight: 600; display: block; margin-bottom: 0.4rem; color: #374151;">Giới Tính *</label>
                             <h:selectOneRadio id="gioiTinh" value="#{sinhVienBean.sinhVien.gioiTinh}" styleClass="radio-group" style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
                                 <f:selectItem itemValue="Nam" itemLabel="Nam"/>
                                 <f:selectItem itemValue="Nữ" itemLabel="Nữ"/>
@@ -93,9 +86,9 @@
                         </div>
                     </div>
 
-                    <div style="display: flex; justify-content: flex-end; gap: 1rem; margin-top: 2rem;">
-                        <h:commandButton value="❌ Hủy Bỏ" action="#{sinhVienBean.cancel()}" immediate="true" styleClass="btn btn-secondary"/>
-                        <h:commandButton value="#{sinhVienBean.editMode ? '💾 Cập Nhật' : '➕ Lưu Sinh Viên'}" action="#{sinhVienBean.save()}" styleClass="btn btn-primary"/>
+                    <div class="form-actions">
+                        <h:commandButton value="Hủy Bỏ" action="#{sinhVienBean.cancel()}" immediate="true" styleClass="btn btn-secondary"/>
+                        <h:commandButton value="#{sinhVienBean.editMode ? 'Cập Nhật' : 'Lưu Sinh Viên'}" action="#{sinhVienBean.save()}" styleClass="btn btn-primary"/>
                     </div>
                 </h:form>
             </div>

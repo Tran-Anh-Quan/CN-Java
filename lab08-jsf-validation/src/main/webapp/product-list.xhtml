@@ -10,22 +10,22 @@
     <ui:define name="content">
         <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div class="header-row">
             <div>
-                <h2>📦 Quản Lý Sản Phẩm</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Danh sách các sản phẩm và thiết bị điện tử</p>
+                <h1 class="page-title">Quản Lý Sản Phẩm</h1>
+                <p class="page-subtitle">Danh sách các sản phẩm và thiết bị điện tử</p>
             </div>
             <h:form style="display:inline;">
-                <h:commandLink action="#{productBean.prepareAdd()}" styleClass="btn btn-primary">➕ Thêm Sản Phẩm Mới</h:commandLink>
+                <h:commandLink action="#{productBean.prepareAdd()}" styleClass="btn btn-primary">Thêm Sản Phẩm Mới</h:commandLink>
             </h:form>
         </div>
 
         <div class="table-card">
             <h:form id="productListForm">
-                <h:dataTable value="#{productBean.productList}" var="p" styleClass="data-table" style="width: 100%; border-collapse: collapse;">
+                <h:dataTable value="#{productBean.productList}" var="p" styleClass="data-table">
                     <h:column>
                         <f:facet name="header">Mã SP</f:facet>
-                        <strong style="color: var(--accent);">#{p.id}</strong>
+                        <strong style="color: #2563eb;">#{p.id}</strong>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Tên Sản Phẩm</f:facet>
@@ -47,9 +47,9 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Thao Tác</f:facet>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <h:commandLink action="#{productBean.prepareEdit(p.id)}" styleClass="btn btn-warning">✏️ Sửa</h:commandLink>
-                            <h:commandLink action="#{productBean.delete(p.id)}" onclick="return confirm('Bạn có muốn xóa sản phẩm này?');" styleClass="btn btn-danger">🗑️ Xóa</h:commandLink>
+                        <div class="action-buttons">
+                            <h:commandLink action="#{productBean.prepareEdit(p.id)}" styleClass="btn btn-warning">Sửa</h:commandLink>
+                            <h:commandLink action="#{productBean.delete(p.id)}" onclick="return confirm('Bạn có muốn xóa sản phẩm này?');" styleClass="btn btn-danger">Xóa</h:commandLink>
                         </div>
                     </h:column>
                 </h:dataTable>

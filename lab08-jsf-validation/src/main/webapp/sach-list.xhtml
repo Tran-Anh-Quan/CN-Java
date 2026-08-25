@@ -10,22 +10,22 @@
     <ui:define name="content">
         <h:messages globalOnly="true" infoClass="alert-messages info-msg" errorClass="alert-messages error-msg" styleClass="alert-messages"/>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div class="header-row">
             <div>
-                <h2>📚 Quản Lý Danh Sách Sách</h2>
-                <p style="color: var(--text-muted); font-size: 0.9rem;">Danh sách các đầu sách công nghệ và khoa học</p>
+                <h1 class="page-title">Quản Lý Danh Sách Sách</h1>
+                <p class="page-subtitle">Danh sách các đầu sách công nghệ và khoa học</p>
             </div>
             <h:form style="display:inline;">
-                <h:commandLink action="#{sachBean.prepareAdd()}" styleClass="btn btn-primary">➕ Thêm Sách Mới</h:commandLink>
+                <h:commandLink action="#{sachBean.prepareAdd()}" styleClass="btn btn-primary">Thêm Sách Mới</h:commandLink>
             </h:form>
         </div>
 
         <div class="table-card">
             <h:form id="sachListForm">
-                <h:dataTable value="#{sachBean.danhSachSach}" var="s" styleClass="data-table" style="width: 100%; border-collapse: collapse;">
+                <h:dataTable value="#{sachBean.danhSachSach}" var="s" styleClass="data-table">
                     <h:column>
                         <f:facet name="header">Mã Sách</f:facet>
-                        <strong style="color: var(--accent);">#{s.maSach}</strong>
+                        <strong style="color: #2563eb;">#{s.maSach}</strong>
                     </h:column>
                     <h:column>
                         <f:facet name="header">Tên Sách</f:facet>
@@ -51,9 +51,9 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">Thao Tác</f:facet>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <h:commandLink action="#{sachBean.prepareEdit(s.maSach)}" styleClass="btn btn-warning">✏️ Sửa</h:commandLink>
-                            <h:commandLink action="#{sachBean.delete(s.maSach)}" onclick="return confirm('Bạn có muốn xóa sách này?');" styleClass="btn btn-danger">🗑️ Xóa</h:commandLink>
+                        <div class="action-buttons">
+                            <h:commandLink action="#{sachBean.prepareEdit(s.maSach)}" styleClass="btn btn-warning">Sửa</h:commandLink>
+                            <h:commandLink action="#{sachBean.delete(s.maSach)}" onclick="return confirm('Bạn có muốn xóa sách này?');" styleClass="btn btn-danger">Xóa</h:commandLink>
                         </div>
                     </h:column>
                 </h:dataTable>

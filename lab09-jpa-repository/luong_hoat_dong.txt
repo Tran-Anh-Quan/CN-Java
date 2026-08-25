@@ -1,0 +1,34 @@
+TÀI LIỆU ĐỌC HIỂU CẤU TRÚC VÀ LUỒNG HOẠT ĐỘNG CỦA DỰ ÁN LAB 09
+------------------------------------------------------------------
+
+1. CẤU TRÚC THƯ MỤC (MÔ HÌNH MVC + REPOSITORY PATTERN)
+- model/ (Entities): Chứa các lớp Java (SinhVien, LopHoc, Diem...) được đánh dấu @Entity. Đây là các đối tượng ánh xạ trực tiếp 1-1 với các bảng trong cơ sở dữ liệu MySQL.
+- repository/: Lớp giao tiếp trực tiếp với cơ sở dữ liệu (Database). Thay vì viết mã SQL thô (JDBC), ở đây sử dụng `BaseRepository` chứa các câu lệnh chung (Generic) và `SinhVienRepository` để thực thi JPA/Hibernate.
+- service/: Chứa quy tắc nghiệp vụ (Business Logic). Ví dụ: Trước khi gọi Repository để lưu dữ liệu, Service sẽ làm nhiệm vụ kiểm tra xem mã sinh viên có bị trùng không, tên có bị trống không, hoặc gộp 2 thao tác (thêm SinhVien + thêm Diem) vào cùng một Transaction (Giao dịch).
+- controller/: Chứa các Servlet đóng vai trò là nhạc trưởng (Ví dụ: `SinhVienController`). Lớp này nhận Request (yêu cầu) từ người dùng (như click nút Tìm Kiếm), điều phối dữ liệu qua Service để xử lý, sau đó trả kết quả (Response) về giao diện JSP.
+- views/ (JSP): Chứa mã nguồn HTML/JSP để hiển thị dữ liệu ra màn hình cho người dùng.
+- config/: Chứa file `JPAUtil` quản lý EntityManagerFactory (Tạo kết nối DB), `EncodingFilter` (Chống lỗi font tiếng Việt) và `DataSeedListener` (Tạo dữ liệu mẫu khi web vừa khởi động).
+- resources/META-INF/persistence.xml: Trái tim của cấu hình JPA, nơi khai báo username, password MySQL và danh sách các bảng (Entities).
+
+------------------------------------------------------------------
+
+2. LUỒNG HOẠT ĐỘNG TỔNG QUAN (VÍ DỤ TÍNH NĂNG TÌM KIẾM SINH VIÊN)
+Bước 1: Người dùng gõ "Nguyễn" vào ô tìm kiếm trên `list.jsp` và ấn nút "Tìm". 
+Bước 2: Form HTML sẽ gửi một Request GET tới địa chỉ `/sinh-vien/search?keyword=Nguyễn`.
+Bước 3: `SinhVienController` bắt được luồng`/search`, bóc tách từ khoá "Nguyễn" rồi gọi `service.searchSinhVien("Nguyễn")`.
+Bước 4: `SinhVienService` kiểm tra xem từ khoá có bị rỗng không, nếu hợp lệ thì gọi tới `repository.searchByName("Nguyễn")`.
+Bước 5: `SinhVienRepository` sử dụng `EntityManager` tạo một câu lệnh JPQL (Java Persistence Query Language): "SELECT s FROM SinhVien s WHERE s.hoTen LIKE :keyword".
+Bước 6: Hibernate (bên dưới JPA) phiên dịch câu JPQL này thành mã SQL thuần: "SELECT * FROM sinh_vien WHERE ho_ten LIKE '%Nguyễn%'" và gửi xuống MySQL.
+Bước 7: MySQL trả về dữ liệu, Hibernate đóng gói tự động các dòng dữ liệu đó thành các Object (Đối tượng) Java `SinhVien`.
+Bước 8: Controller nhận List các đối tượng `SinhVien`, đưa vào gói hàng `request.setAttribute("listSinhVien", ...)` và đẩy ngược về trang `list.jsp`.
+Bước 9: Giao diện `list.jsp` dùng vòng lặp `<c:forEach>` đọc từng Object SinhVien để render ra các thẻ <tr><td> hiển thị lên màn hình.
+
+------------------------------------------------------------------
+
+3. DỮ LIỆU ĐƯỢC LƯU TRỮ VÀ RÀNG BUỘC RA SAO?
+- Tự động sinh bảng: Do trong `persistence.xml` có dòng `<property name="hibernate.hbm2ddl.auto" value="update" />`, Hibernate sẽ tự động so sánh code Java Entity và CSDL MySQL. Nếu bảng `sinh_vien` chưa có, nó sẽ tự động phát sinh lệnh `CREATE TABLE`.
+- Ràng buộc quan hệ: JPA quản lý bằng Annotation. 
+  + Trong Entity `SinhVien` có `@ManyToOne private LopHoc lopHoc;`. Hệ thống sẽ tự tạo cột `ma_lop` (khoá ngoại) trong bảng `sinh_vien`.
+  + Nếu bạn xóa một Lớp học, do cài đặt tính năng `ON DELETE SET NULL`, tất cả sinh viên thuộc lớp đó sẽ bị cập nhật `ma_lop = NULL` chứ không bị xóa theo.
+- Lỗi trùng lặp: Nếu bạn cố tình nhập `maSv` đã tồn tại, `SinhVienService` sẽ sử dụng `findById` check trước. Hoặc nếu nó bỏ sót, MySQL sẽ ném ra lỗi `ConstraintViolationException` vì trong Entity khai báo `@Id` cho khoá chính (duy nhất).
+- Quản lý tính nhất quán (Transaction): Bất cứ khi nào thao tác ghi (Save/Update/Delete), code luôn nằm giữa `tx.begin();` và `tx.commit();`. Nếu lỗi ném ra ở giữa chừng, `tx.rollback();` sẽ đảo ngược toàn bộ dữ liệu, CSDL không bao giờ bị tình trạng ghi dở dang nửa vời.
