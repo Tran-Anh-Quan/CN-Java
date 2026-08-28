@@ -1,0 +1,324 @@
+================================================================================
+                         TỔNG QUAN LAB 10 - SECURED APP
+                    Bảo Mật Ứng Dụng Web Java với RBAC
+================================================================================
+
+================================================================================
+1. CẤU TRÚC PROJECT
+================================================================================
+
+lab10-secured-app/
+├── src/main/java/vn/edu/eaut/lab10/
+│   ├── config/
+│   │   └── JPAUtil.java              # Cấu hình Hibernate/JPA
+│   ├── controller/
+│   │   └── AuthController.java        # Xử lý các request (login, logout, dashboard...)
+│   ├── filter/
+│   │   ├── AuthenticationFilter.java  # Filter kiểm tra đăng nhập
+│   │   └── AuthorizationFilter.java  # Filter kiểm tra quyền (phân quyền URL)
+│   ├── listener/
+│   │   └── AppListener.java           # Khởi tạo dữ liệu mặc định
+│   ├── model/
+│   │   ├── User.java                  # Entity User
+│   │   ├── Role.java                  # Entity Role
+│   │   └── AuditLog.java              # Entity Audit Log (Nhật ký)
+│   ├── repository/
+│   │   ├── UserRepository.java        # Truy vấn User
+│   │   └── AuditLogRepository.java    # Truy vấn AuditLog
+│   └── service/
+│       └── AuthService.java           # Xử lý nghiệp vụ (auth, register, audit)
+│
+├── src/main/webapp/
+│   ├── login.jsp                      # Trang đăng nhập/đăng ký
+│   ├── dashboard.jsp                  # Trang chính sau đăng nhập
+│   ├── admin/index.jsp                # Trang quản trị (Admin)
+│   ├── staff/index.jsp                # Trang nghiệp vụ (Staff)
+│   ├── user/index.jsp                 # Trang hồ sơ cá nhân (User)
+│   ├── views/
+│   │   ├── header.jsp                 # Header + Navigation
+│   │   └── footer.jsp                 # Footer
+│   └── error/
+│       ├── 403.jsp                   # Trang từ chối truy cập
+│       ├── 404.jsp                   # Trang không tìm thấy
+│       └── 500.jsp                   # Trang lỗi server
+│
+└── pom.xml                           # Maven dependencies
+
+================================================================================
+2. CÔNG NGHỆ SỬ DỤNG
+================================================================================
+
+- Java 17
+- Jakarta Servlet API 6.0 (Tomcat 10)
+- JSP + JSTL (JSP Standard Tag Library)
+- Hibernate ORM 6.4 (JPA)
+- MySQL Database
+- BCrypt (mã hóa password)
+- Maven (build tool)
+- Lombok (giảm boilerplate code)
+
+================================================================================
+3. MÔ HÌNH PHÂN QUYỀN (RBAC - Role-Based Access Control)
+================================================================================
+
+3.1. CÁC VAI TRÒ (ROLES)
+-------------------------
+- ROLE_ADMIN  : Quản trị viên - có toàn quyền
+- ROLE_STAFF  : Nhân viên - có quyền nghiệp vụ
+- ROLE_USER   : Người dùng - chỉ có quyền cá nhân
+
+3.2. BẢNG users
+---------------
+- id          : Primary Key
+- username    : Tên đăng nhập (unique)
+- password    : Mật khẩu (đã mã hóa BCrypt)
+- fullName    : Họ tên đầy đủ
+- email       : Email liên hệ
+- active      : Trạng thái (true = hoạt động, false = bị khóa)
+- createdAt   : Ngày tạo
+
+3.3. BẢNG roles
+---------------
+- id          : Primary Key
+- name        : Tên vai trò (ROLE_ADMIN, ROLE_STAFF, ROLE_USER)
+- description : Mô tả vai trò
+
+3.4. BẢNG user_roles (Many-to-Many)
+-----------------------------------
+- user_id     : Foreign Key -> users
+- role_id     : Foreign Key -> roles
+
+3.5. BẢNG audit_logs
+--------------------
+- id          : Primary Key
+- username    : Tài khoản thực hiện
+- action      : Hành động (LOGIN, LOGOUT, ADMIN_EDIT, STAFF_ACCESS, ...)
+- details     : Chi tiết hành động
+- createdAt   : Thời gian
+
+================================================================================
+4. CƠ CHẾ XÁC THỰC (AUTHENTICATION)
+================================================================================
+
+4.1. QUY TRÌNH ĐĂNG NHẬP
+--------------------------
+1. User truy cập /login -> AuthController.showLoginForm()
+2. User nhập username/password -> POST /login
+3. AuthService.authenticate() kiểm tra:
+   - Tài khoản tồn tại?
+   - Mật khẩu đúng? (so sánh BCrypt hash)
+   - Tài khoản có bị khóa? (active = true?)
+4. Nếu thành công: Lưu User vào Session -> chuyển đến Dashboard
+5. Nếu thất bại: Hiện thông báo lỗi
+
+4.2. MÃ HÓA PASSWORD (BCRYPT)
+------------------------------
+- Password không lưu plain text
+- BCrypt.hashpw(password, BCrypt.gensalt()) để mã hóa
+- BCrypt.checkpw(input, stored) để kiểm tra
+- Mỗi lần hash khác nhau (salt ngẫu nhiên) nhưng đều verify được
+
+4.3. SESSION
+-------------
+- HttpSession lưu "currentUser" sau khi đăng nhập
+- Session timeout: mặc định 30 phút
+- Logout: session.invalidate()
+
+================================================================================
+5. CƠ CHẾ PHÂN QUYỀN (AUTHORIZATION)
+================================================================================
+
+5.1. FILTER (BỘ LỌC)
+---------------------
+Filter là "người gác cổng" đứng trước request.
+
+a) AUTHENTICATION FILTER
+   - Áp dụng: /dashboard, /admin/*, /staff/*, /user/*
+   - Kiểm tra: Đã đăng nhập chưa?
+   - Nếu chưa: Redirect về /login
+   - Nếu rồi: Cho qua
+
+b) AUTHORIZATION FILTER
+   - Áp dụng: /admin/*, /staff/*, /user/*
+   - Kiểm tra: Có quyền không?
+   - /admin/*  : Cần ROLE_ADMIN
+   - /staff/*  : Cần ROLE_ADMIN hoặc ROLE_STAFF
+   - /user/*   : Cần đăng nhập (bất kỳ role nào)
+   - Nếu không có quyền: Forward đến /error/403.jsp
+
+5.2. ẨN/HIỂN MENU THEO ROLE
+---------------------------
+Trong header.jsp và dashboard.jsp dùng JSTL <c:if>:
+   
+   <c:set var="isAdmin" value="false" />
+   <c:set var="isStaff" value="false" />
+   <c:forEach var="r" items="${sessionScope.currentUser.roles}">
+       <c:if test="${r.name == 'ROLE_ADMIN'}"><c:set var="isAdmin" value="true" /></c:if>
+       <c:if test="${r.name == 'ROLE_STAFF'}"><c:set var="isStaff" value="true" /></c:if>
+   </c:forEach>
+
+   <!-- Menu chỉ hiện khi có quyền -->
+   <c:if test="${isAdmin}">
+       <li><a href="/admin/users">Quản Lý User</a></li>
+   </c:if>
+
+   <c:if test="${isAdmin || isStaff}">
+       <li><a href="/staff/dashboard">Nghiệp Vụ</a></li>
+   </c:if>
+
+5.3. BẢO VỆ 2 LỚP
+------------------
+- LỚP 1: Filter bảo vệ URL (ngăn truy cập trực tiếp)
+- LỚP 2: Menu ẩn theo role (UI không hiện option không có quyền)
+
+================================================================================
+6. AUDIT LOG (NHẬT KÝ HỆ THỐNG)
+================================================================================
+
+6.1. MỤC ĐÍCH
+--------------
+- Ghi lại mọi hành động quan trọng
+- Theo dõi ai làm gì, lúc nào
+- Phục vụ kiểm tra bảo mật (security audit)
+
+6.2. CÁC HÀNH ĐỘNG ĐƯỢC GHI
+----------------------------
+- LOGIN              : Đăng nhập thành công
+- LOGIN_FAILED       : Đăng nhập thất bại
+- LOGOUT             : Đăng xuất
+- ADMIN_EDIT_USER    : Admin sửa user
+- ADMIN_TOGGLE_STATUS: Admin khóa/mở khóa user
+- STAFF_ACCESS       : Staff truy cập trang nghiệp vụ
+- PROFILE_UPDATE     : User cập nhật hồ sơ
+- PASSWORD_CHANGE    : User đổi mật khẩu
+
+6.3. AI THẤY AUDIT LOG?
+-----------------------
+- Dashboard hiển thị tất cả log (chỉ ADMIN)
+- User profile chỉ thấy log của chính mình
+
+================================================================================
+7. CÁC TRANG VÀ CHỨC NĂNG
+================================================================================
+
+7.1. TRANG ĐĂNG NHẬP (/login)
+-----------------------------
+- Form đăng nhập: username + password
+- Form đăng ký: username, fullName, email, password, role
+- Hiển thị tài khoản demo
+- Thông báo lỗi/thành công
+
+7.2. DASHBOARD (/dashboard)
+---------------------------
+- Chào mừng user
+- Hiển thị cards theo role:
+  * Card Admin (chỉ Admin thấy)
+  * Card Staff (Admin + Staff thấy)
+  * Card User (ai cũng thấy)
+- Bảng Audit Logs (chỉ Admin thấy)
+
+7.3. TRANG ADMIN (/admin/users)
+-------------------------------
+- Danh sách tất cả users
+- Tìm kiếm theo username/email
+- Thao tác:
+  * Sửa user (đổi fullName, email, role, active)
+  * Khóa/Mở khóa tài khoản
+
+7.4. TRANG STAFF (/staff/dashboard)
+------------------------------------
+- Trang nghiệp vụ dành cho Staff/Admin
+- Nội dung nghiệp vụ
+
+7.5. TRANG USER (/user/profile)
+-------------------------------
+- Xem thông tin cá nhân
+- Cập nhật fullName, email
+- Đổi mật khẩu
+- Xem nhật ký hoạt động cá nhân
+
+================================================================================
+8. TÀI KHOẢN DEMO
+================================================================================
+
+| Username | Password  | Role        | Quyền                   |
+|----------|-----------|-------------|-------------------------|
+| admin    | admin123  | ADMIN       | Toàn quyền              |
+| staff    | staff123  | STAFF       | Nghiệp vụ + User        |
+| user     | user123   | USER        | Chỉ xem hồ sơ cá nhân   |
+
+================================================================================
+9. CÁC THÀNH PHẦN QUAN TRỌNG CẦN NẮM
+================================================================================
+
+9.1. @WebFilter
+---------------
+- Annotation đánh dấu Filter
+- urlPatterns: các URL mà Filter áp dụng
+- Thứ tự Filter: theo alphabetical order của class name
+
+9.2. HttpSession
+----------------
+- Lưu trữ thông tin user đã đăng nhập
+- session.getAttribute("currentUser") -> lấy user
+- session.invalidate() -> đăng xuất
+
+9.3. RequestDispatcher.forward()
+---------------------------------
+- Chuyển tiếp request đến trang khác (cùng server)
+- Giữ nguyên URL trên trình duyệt
+
+9.4. Response.sendRedirect()
+----------------------------
+- Chuyển hướng đến URL mới
+- URL trên trình duyệt thay đổi
+
+9.5. JSTL <c:if>
+----------------
+- Taglib: <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+- Kiểm tra điều kiện hiển thị nội dung
+
+9.6. BCrypt
+-----------
+- Thuật toán hash password mạnh
+- Có salt ngẫu nhiên
+- Chống rainbow table attack
+
+================================================================================
+10. CÂU HỎI THƯỜNG GẶP
+================================================================================
+
+Q1: Tại sao cần Filter?
+A: Filter giúp bảo vệ URL ngay cả khi user truy cập trực tiếp (không qua menu).
+
+Q2: Tại sao cần ẩn menu?
+A: UX tốt hơn + phòng trường hợp Filter bị bypass.
+
+Q3: BCrypt hash có giải mã được không?
+A: Không! BCrypt là one-way hash. Chỉ verify được, không revert được.
+
+Q4: Session vs Cookie?
+A: Session lưu server-side, Cookie lưu client-side (session ID).
+
+Q5: Audit log lưu ở đâu?
+A: Lưu trong bảng audit_logs trong database MySQL.
+
+================================================================================
+11. CÁC BƯỚC CHẠY PROJECT
+================================================================================
+
+1. Tạo database MySQL:
+   - Tên: lab10_db
+   - User: root (hoặc cấu hình trong persistence.xml)
+
+2. Import database schema (JPA/Hibernate sẽ tạo tự động nếu có
+   hibernate.hbm2ddl.auto=update)
+
+3. Chạy Maven:
+   mvn clean package cargo:run
+
+4. Truy cập: http://localhost:8080/lab10/login
+
+================================================================================
+                              HẾT TÀI LIỆU
+================================================================================

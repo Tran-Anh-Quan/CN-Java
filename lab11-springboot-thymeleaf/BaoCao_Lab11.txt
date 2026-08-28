@@ -1,0 +1,43 @@
+BÁO CÁO NGẮN LAB 11
+SPRING BOOT VÀ THYMELEAF
+
+1. Mục tiêu
+Xây dựng ứng dụng web giới thiệu thông tin đào tạo bằng Spring Boot kết hợp giao diện Thymeleaf và mô hình MVC.
+
+2. Công nghệ sử dụng
+- Java 17
+- Spring Boot 3.2.3
+- Spring MVC
+- Thymeleaf
+- Maven
+- HTML/CSS
+
+3. Chức năng chính
+- Trang chủ: hiển thị lời chào và thông tin tổng quan.
+- Trang giới thiệu: hiển thị tên ứng dụng, tác giả và mô tả.
+- Trang khóa học: hiển thị danh sách các khóa học mẫu.
+- Trang sinh viên: hiển thị danh sách sinh viên mẫu và điểm trung bình.
+- Trang liên hệ: hiển thị thông tin khoa, địa chỉ, số điện thoại, email và website.
+
+4. Cấu trúc chương trình
+- Lab11Application: lớp khởi động ứng dụng Spring Boot.
+- controller: tiếp nhận request và truyền dữ liệu đến giao diện.
+- model: chứa các lớp dữ liệu Course và Student.
+- templates: chứa các file giao diện Thymeleaf.
+- application.properties: cấu hình cổng chạy và Thymeleaf.
+
+5. Các đường dẫn chính
+- /          : Trang chủ
+- /about     : Giới thiệu
+- /courses   : Danh sách khóa học
+- /students  : Danh sách sinh viên
+- /contact   : Liên hệ
+
+6. Cách chạy
+Mở terminal tại thư mục lab11-springboot-thymeleaf và chạy:
+  mvn spring-boot:run
+
+Sau đó truy cập: http://localhost:8080
+
+7. Nhận xét
+Ứng dụng minh họa được cách xây dựng website bằng Spring Boot, tổ chức theo mô hình MVC và sử dụng Thymeleaf để hiển thị dữ liệu động. Hiện tại chương trình chưa kết nối cơ sở dữ liệu; dữ liệu khóa học và sinh viên được tạo trực tiếp trong controller.

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Lab 11 - Trang chủ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <div class="logo">Lab11 - Spring Boot</div>
+        <ul class="nav-links">
+            <li><a href="/" class="active">Trang Chủ</a></li>
+            <li><a href="/about">Giới Thiệu</a></li>
+            <li><a href="/students">Sinh Viên</a></li>
+            <li><a href="/courses">Khóa Học</a></li>
+            <li><a href="/contact">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero-card">
+            <h1 th:text="${welcomeMessage}">Chào mừng đến với Lab 11</h1>
+            <p class="welcome">Xây dựng Ứng dụng Web Java với Spring Boot MVC và Giao diện Động Thymeleaf.</p>
+            <div class="btn-group">
+                <a href="/students" class="btn btn-primary">Xem Sinh Viên</a>
+                <a href="/about" class="btn btn-secondary">Tìm Hiểu Thêm</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 EAUT - Spring Boot & Thymeleaf Lab 11 Project</p>
+    </footer>
+</body>
+</html>

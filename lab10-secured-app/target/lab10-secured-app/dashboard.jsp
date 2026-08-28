@@ -253,7 +253,8 @@
         </div>
     </div>
 
-    <!-- AUDIT LOGS SECTION (Bài 12) -->
+    <!-- AUDIT LOGS SECTION (Bài 12) - Chỉ ADMIN mới thấy -->
+    <c:if test="${isAdmin}">
     <div class="table-card">
         <div class="table-title">
             <i class="fa-solid fa-clock-rotate-left" style="color: var(--accent-purple);"></i>
@@ -284,6 +285,7 @@
             </tbody>
         </table>
     </div>
+    </c:if>
 </div>
 
 <jsp:include page="/views/footer.jsp" />

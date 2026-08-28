@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Lab 11 - Danh sách Sinh viên</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <div class="logo">Lab11 - Spring Boot</div>
+        <ul class="nav-links">
+            <li><a href="/">Trang Chủ</a></li>
+            <li><a href="/about">Giới Thiệu</a></li>
+            <li><a href="/students" class="active">Sinh Viên</a></li>
+            <li><a href="/courses">Khóa Học</a></li>
+            <li><a href="/contact">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h1>Danh Sách Sinh Viên</h1>
+                <span class="badge" th:text="${#lists.size(students)} + ' Sinh Viên'">5 Sinh Viên</span>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã SV</th>
+                            <th>Họ và Tên</th>
+                            <th>Email</th>
+                            <th>Chuyên Ngành</th>
+                            <th>Điểm GPA</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="student : ${students}">
+                            <td th:text="${student.id}">SV001</td>
+                            <td th:text="${student.name}">Nguyễn Văn An</td>
+                            <td th:text="${student.email}">an.nv@eaut.edu.vn</td>
+                            <td th:text="${student.major}">Công nghệ thông tin</td>
+                            <td>
+                                <span th:text="${#numbers.formatDecimal(student.gpa, 1, 2)}"
+                                      th:class="${student.gpa >= 3.6 ? 'badge gpa-high' : 'badge'}">
+                                    3.65
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 EAUT - Spring Boot & Thymeleaf Lab 11 Project</p>
+    </footer>
+</body>
+</html>

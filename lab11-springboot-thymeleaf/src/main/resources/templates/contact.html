@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">Lab 11 - Liên hệ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <nav>
+        <div class="logo">Lab11 - Spring Boot</div>
+        <ul class="nav-links">
+            <li><a href="/">Trang Chủ</a></li>
+            <li><a href="/about">Giới Thiệu</a></li>
+            <li><a href="/students">Sinh Viên</a></li>
+            <li><a href="/courses">Khóa Học</a></li>
+            <li><a href="/contact" class="active">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h1>Thông Tin Liên Hệ</h1>
+            <p class="subtitle">Khoa/Bộ môn Công nghệ Thông tin - Trường Đại học Công nghiệp Hà Nội</p>
+
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">🏢</div>
+                    <div class="contact-label">Khoa</div>
+                    <div class="contact-value" th:text="${facultyName}">Khoa Công Nghệ Thông Tin</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📚</div>
+                    <div class="contact-label">Bộ Môn</div>
+                    <div class="contact-value" th:text="${department}">Bộ Môn Công Nghệ Phần Mềm</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-label">Địa Chỉ</div>
+                    <div class="contact-value" th:text="${address}">Tầng 4, Tòa nhà A, Trường Đại học Công nghiệp Hà Nội</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-label">Điện Thoại</div>
+                    <div class="contact-value" th:text="${phone}">024.3855.1234</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value" th:text="${email}">cntt@haui.edu.vn</div>
+                </div>
+
+                <div class="contact-card">
+                    <div class="contact-icon">🌐</div>
+                    <div class="contact-label">Website</div>
+                    <div class="contact-value">
+                        <a th:href="${website}" th:text="${website}" target="_blank">https://haui.edu.vn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 EAUT - Spring Boot & Thymeleaf Lab 11 Project</p>
+    </footer>
+</body>
+</html>
