@@ -18,8 +18,11 @@ public class SinhVienRepository {
     }
 
     public List<SinhVien> findAll(int page, int pageSize) {
+        if (page < 1 || pageSize < 1) {
+            return new ArrayList<>();
+        }
         int fromIndex = (page - 1) * pageSize;
-        if (list == null || list.size() <= fromIndex) {
+        if (fromIndex >= list.size()) {
             return new ArrayList<>();
         }
         return list.subList(fromIndex, Math.min(fromIndex + pageSize, list.size()));
@@ -30,8 +33,9 @@ public class SinhVienRepository {
     }
 
     public SinhVien findById(String id) {
+        if (id == null) return null;
         for (SinhVien sv : list) {
-            if (sv.getId().equals(id)) return sv;
+            if (id.equals(sv.getId())) return sv;
         }
         return null;
     }
@@ -48,6 +52,8 @@ public class SinhVienRepository {
     }
 
     public void delete(String id) {
-        list.removeIf(sv -> sv.getId().equals(id));
+        if (id != null) {
+            list.removeIf(sv -> id.equals(sv.getId()));
+        }
     }
 }

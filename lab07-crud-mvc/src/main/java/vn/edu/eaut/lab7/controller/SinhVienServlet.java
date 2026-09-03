@@ -65,13 +65,18 @@ public class SinhVienServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        String action = req.getParameter("action");
         String id = req.getParameter("id");
         String name = req.getParameter("name");
         String email = req.getParameter("email");
         String className = req.getParameter("className");
 
-        if (id != null && !id.trim().isEmpty()) {
-            SinhVien sv = new SinhVien(id.trim(), name, email, className);
+        if (("insert".equals(action) || "update".equals(action))
+                && id != null && !id.trim().isEmpty()
+                && name != null && !name.trim().isEmpty()
+                && email != null && !email.trim().isEmpty()
+                && className != null && !className.trim().isEmpty()) {
+            SinhVien sv = new SinhVien(id.trim(), name.trim(), email.trim(), className.trim());
             repository.save(sv);
         }
 

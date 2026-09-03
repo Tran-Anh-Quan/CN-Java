@@ -1,0 +1,30 @@
+BÁO CÁO THỰC HÀNH LAB 12
+Môn học: Lập trình Java
+Dự án: lab12-spring-mvc-student
+
+1. Mục tiêu:
+- Xây dựng ứng dụng Web cơ bản sử dụng Spring Boot và Spring MVC.
+- Hiểu và áp dụng mô hình MVC (Model - View - Controller).
+- Tích hợp Thymeleaf để tạo giao diện người dùng (View).
+- Thực hiện các thao tác CRUD (Thêm, Sửa, Xóa, Xem danh sách và Xem chi tiết) trên đối tượng Sinh viên (Student).
+
+2. Cấu trúc thư mục & thành phần chính:
+- Controller (StudentController.java): Xử lý các HTTP request, liên kết dữ liệu giữa View và Service, sau đó điều hướng người dùng.
+- Model (Student.java): Đại diện cho thực thể sinh viên, tích hợp thư viện jakarta.validation (@Valid) để kiểm tra tính hợp lệ của dữ liệu đầu vào.
+- Service (StudentService.java): Lớp trung gian xử lý logic nghiệp vụ của ứng dụng (Business Logic) và quản lý danh sách sinh viên.
+- Views (src/main/resources/templates/students/):
+  + list.html: Hiển thị danh sách toàn bộ sinh viên.
+  + form.html: Form dùng chung cho chức năng Thêm mới và Cập nhật, có hiển thị các lỗi xác thực (validation errors).
+  + detail.html: Hiển thị chi tiết thông tin của một sinh viên cụ thể.
+- Configuration: Tệp application.properties dùng để thiết lập các thông số môi trường của Spring Boot.
+
+3. Các chức năng và luồng xử lý (Endpoints tại "/students"):
+- GET /students: Lấy danh sách sinh viên từ Service và trả về trang list.html.
+- GET /students/create: Trả về trang form.html kèm theo một đối tượng Student rỗng để người dùng nhập.
+- POST /students/save: Gửi dữ liệu form lên. Sử dụng BindingResult để kiểm tra lỗi đầu vào. Nếu có lỗi, trả lại trang form; nếu hợp lệ, tiến hành lưu lại qua Service và điều hướng (redirect) về trang danh sách.
+- GET /students/edit/{id}: Lấy thông tin sinh viên theo ID tương ứng và đưa lên trang form.html để người dùng sửa.
+- GET /students/{id}: Lấy chi tiết thông tin của một sinh viên theo ID và hiển thị trên trang detail.html.
+- GET /students/delete/{id}: Gọi hàm xóa sinh viên theo ID trong Service và tự động điều hướng về lại trang danh sách.
+
+4. Kết luận:
+- Dự án đã đáp ứng tốt các yêu cầu cơ bản về việc xây dựng một ứng dụng web CRUD chuẩn mực với hệ sinh thái Spring (Spring Boot + Spring MVC) kết hợp với công cụ render HTML (Thymeleaf). Cấu trúc mã nguồn được phân lớp rõ ràng, tuân thủ đúng kiến trúc MVC, dễ dàng cho việc bảo trì và mở rộng sau này.
