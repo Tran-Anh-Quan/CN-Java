@@ -1,0 +1,184 @@
+====================================================
+        BAO CAO THUC HANH - LAB 13
+        SPRING DATA JPA
+====================================================
+
+Ho va ten   : [Tran Anh Quan]
+Mon hoc     : Lap trinh Java
+Ngay thuc hanh: 04/09/2026
+
+----------------------------------------------------
+I. MUC TIEU
+----------------------------------------------------
+- Tim hieu va su dung Spring Data JPA de thao tac
+  voi co so du lieu.
+- Tao cac entity, repository, service va controller
+  theo mo hinh phan lop (Layered Architecture).
+- Thuc hien cac chuc nang CRUD (Create, Read, Update,
+  Delete) va tim kiem du lieu.
+
+----------------------------------------------------
+II. NOI DUNG THUC HANH
+----------------------------------------------------
+
+Bai 1. Them dependency JPA va H2
+- Them dependency spring-boot-starter-data-jpa de
+  su dung Spring Data JPA.
+- Them dependency H2 Database (embedded) de lam co
+  so du lieu trong bo nho, khong can cai dat server.
+- Cau hinh trong file application.properties:
+  + spring.datasource.url=jdbc:h2:mem:lab13
+  + spring.jpa.hibernate.ddl-auto=update
+  + Bat H2 Console tai /h2-console
+
+Bai 2. Tao entity Student
+- Tao lop Student trong package entity, anh xa voi
+  bang "students" trong CSDL.
+- Cac truong: id (khoa chinh, tu tang), name, email.
+- Su dung cac annotation: @Entity, @Table, @Id,
+  @GeneratedValue, @Column.
+
+Bai 3. Tao Repository
+- Tao interface StudentRepository ke thua JpaRepository.
+- Them method tim kiem:
+  + findByNameContainingIgnoreCase(String name)
+    -> Tim sinh vien theo ten (khong phan biet hoa thuong)
+  + findByEmailContainingIgnoreCase(String email)
+    -> Tim sinh vien theo email
+
+Bai 4. Tao Service
+- Tao lop StudentService voi annotation @Service.
+- Cac phuong thuc nghiep vu:
+  + getAllStudents()    : Lay danh sach tat ca sinh vien
+  + saveStudent()      : Luu (them moi hoac cap nhat)
+  + getStudentById()   : Lay sinh vien theo ID
+  + deleteStudentById(): Xoa sinh vien theo ID
+  + searchByName()     : Tim kiem theo ten
+  + searchByEmail()    : Tim kiem theo email
+
+Bai 5. Controller CRUD voi CSDL
+- Tao StudentController voi @RequestMapping("/students").
+- Cac endpoint:
+  + GET  /students         : Hien thi danh sach (ho tro
+                              tim kiem voi param keyword)
+  + GET  /students/new     : Hien thi form them moi
+  + POST /students         : Luu sinh vien
+  + GET  /students/edit/{id}: Hien thi form chinh sua
+  + GET  /students/delete/{id}: Xoa sinh vien
+- Tao 2 template Thymeleaf:
+  + students/list.html : Danh sach sinh vien dang bang
+  + students/form.html : Form them/sua sinh vien
+
+Bai 6. Sua sinh vien theo ID
+- Endpoint GET /students/edit/{id} nhan ID tu URL,
+  truy van sinh vien tuong ung va dua vao form.
+- Form su dung hidden field "id". Khi submit, JPA
+  tu dong nhan biet la UPDATE (vi id != null).
+
+Bai 7. Tim kiem sinh vien theo ho ten
+- Su dung StudentRepository.findByNameContainingIgnoreCase()
+  de tim kiem theo tu khoa.
+- Controller nhan tham so "keyword" tu URL query string.
+- Giao dien list.html co thanh tim kiem voi nut Search
+  va nut Clear de xoa bo loc.
+
+Bai 8. Them entity Course
+- Tao lop Course trong package entity, anh xa bang
+  "courses" trong CSDL.
+- Cac truong:
+  + id         : Khoa chinh, tu tang
+  + courseCode  : Ma mon hoc (unique)
+  + courseName  : Ten mon hoc
+  + credits     : So tin chi
+
+Bai 9. Tao CRUD cho Course
+- Tao CourseRepository ke thua JpaRepository, co method
+  findByCourseNameContainingIgnoreCase().
+- Tao CourseService xu ly nghiep vu CRUD va tim kiem.
+- Tao CourseController voi @RequestMapping("/courses"):
+  + GET  /courses          : Danh sach mon hoc
+  + GET  /courses/new      : Form them moi
+  + POST /courses          : Luu mon hoc
+  + GET  /courses/edit/{id}: Form chinh sua
+  + GET  /courses/delete/{id}: Xoa mon hoc
+- Tao 2 template: courses/list.html va courses/form.html.
+- Them thanh dieu huong (nav) giua Students va Courses.
+
+Bai 10. Chuyen cau hinh tu H2 sang MySQL
+- Thay doi dependency trong pom.xml:
+  + Xoa: com.h2database:h2
+  + Them: com.mysql:mysql-connector-j
+- Cap nhat application.properties:
+  + spring.datasource.url=jdbc:mysql://localhost:3306/lab13
+  + spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+  + spring.jpa.properties.hibernate.dialect=
+    org.hibernate.dialect.MySQLDialect
+- Tao database "lab13" trong MySQL truoc khi chay.
+- Hibernate tu dong tao bang nho ddl-auto=update.
+
+----------------------------------------------------
+III. CAU TRUC THU MUC DU AN
+----------------------------------------------------
+
+lab13-spring-data-jpa/
+|-- pom.xml
+|-- src/main/
+    |-- java/vn/edu/eaut/lab13/
+    |   |-- Lab13Application.java
+    |   |-- controller/
+    |   |   |-- StudentController.java
+    |   |   |-- CourseController.java
+    |   |-- entity/
+    |   |   |-- Student.java
+    |   |   |-- Course.java
+    |   |-- repository/
+    |   |   |-- StudentRepository.java
+    |   |   |-- CourseRepository.java
+    |   |-- service/
+    |       |-- StudentService.java
+    |       |-- CourseService.java
+    |-- resources/
+        |-- application.properties
+        |-- templates/
+            |-- students/
+            |   |-- list.html
+            |   |-- form.html
+            |-- courses/
+                |-- list.html
+                |-- form.html
+
+----------------------------------------------------
+IV. CONG NGHE SU DUNG
+----------------------------------------------------
+- Java 17
+- Spring Boot 3.1.3
+- Spring Data JPA (Hibernate)
+- Thymeleaf (Template Engine)
+- H2 Database (Bai 1-9) / MySQL (Bai 10)
+- Maven (Build Tool)
+
+----------------------------------------------------
+V. KET QUA DAT DUOC
+----------------------------------------------------
+- Hoan thanh day du 10 bai thuc hanh.
+- Ung dung chay thanh cong, thao tac CRUD hoat dong
+  dung voi ca 2 entity: Student va Course.
+- Chuc nang tim kiem theo ten hoat dong chinh xac.
+- Chuyen doi thanh cong tu H2 sang MySQL.
+- Giao dien web don gian, truc quan voi Thymeleaf.
+
+----------------------------------------------------
+VI. KET LUAN
+----------------------------------------------------
+- Spring Data JPA giup don gian hoa viec truy van CSDL
+  thong qua JpaRepository, khong can viet SQL thu cong.
+- Mo hinh phan lop (Entity -> Repository -> Service ->
+  Controller) giup code ro rang, de bao tri.
+- Thymeleaf tich hop tot voi Spring Boot de tao giao
+  dien dong phia server.
+- Viec chuyen doi giua H2 va MySQL chi can thay doi
+  cau hinh, khong can sua code Java.
+
+====================================================
+                    HET BAO CAO
+====================================================

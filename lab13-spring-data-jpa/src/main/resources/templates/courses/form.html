@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Form</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 40px; background-color: #f9f9f9; }
+        .form-container { max-width: 500px; background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; margin-top: 0; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input[type="text"], input[type="number"] { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        .btn { padding: 10px 15px; color: white; border: none; cursor: pointer; border-radius: 4px; font-size: 16px; }
+        .btn-save { background-color: #4CAF50; }
+        .btn-save:hover { background-color: #45a049; }
+        .btn-cancel { background-color: #9e9e9e; text-decoration: none; display: inline-block; padding: 10px 15px; }
+        .btn-cancel:hover { background-color: #777; }
+        .actions { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 th:text="${course.id != null ? 'Edit Course' : 'Add Course'}">Add Course</h2>
+        <form th:action="@{/courses}" th:object="${course}" method="post">
+            <input type="hidden" th:field="*{id}" />
+            <div class="form-group">
+                <label for="courseCode">Course Code:</label>
+                <input type="text" id="courseCode" th:field="*{courseCode}" required placeholder="e.g. CS101" />
+            </div>
+            <div class="form-group">
+                <label for="courseName">Course Name:</label>
+                <input type="text" id="courseName" th:field="*{courseName}" required placeholder="e.g. Introduction to Computer Science" />
+            </div>
+            <div class="form-group">
+                <label for="credits">Credits:</label>
+                <input type="number" id="credits" th:field="*{credits}" required min="1" max="10" placeholder="e.g. 3" />
+            </div>
+            <div class="actions">
+                <button type="submit" class="btn btn-save">Save</button>
+                <a th:href="@{/courses}" class="btn btn-cancel">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
