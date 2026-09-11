@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng Điều Khiển - Quản Lý Đơn Hàng</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f5f5; }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; padding: 20px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { font-size: 1.8em; }
+        .platform-badge { background: rgba(255,255,255,0.2); padding: 8px 20px; border-radius: 20px; font-size: 0.9em; }
+        .navbar { background: #343a40; padding: 0 40px; }
+        .navbar ul { list-style: none; display: flex; gap: 30px; }
+        .navbar a { color: #adb5bd; text-decoration: none; padding: 15px 0; display: block; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .navbar a:hover, .navbar a.active { color: white; border-bottom-color: #667eea; }
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; }
+        .card { background: white; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 20px; }
+        .card h2 { color: #333; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #667eea; }
+        .stat-card { display: inline-block; width: 200px; padding: 20px; margin: 10px; border-radius: 10px; text-align: center; color: white; }
+        .stat-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .stat-warning { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .stat-info { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .stat-success { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .stat-number { font-size: 2.5em; font-weight: bold; margin: 10px 0; }
+        .stat-label { font-size: 0.9em; opacity: 0.9; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #667eea; color: white; font-weight: 600; }
+        tr:hover { background: #f8f9fa; }
+        .status-badge { display: inline-block; padding: 5px 15px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #cce5ff; color: #004085; }
+        .status-processing { background: #e2e3e5; color: #383d41; }
+        .status-packed { background: #d1ecf1; color: #0c5460; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-shipped { background: #cce5ff; color: #002752; }
+        .status-completed { background: #28a745; color: white; }
+        .status-cancelled { background: #f8d7da; color: #721c24; }
+        .btn { display: inline-block; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9em; text-decoration: none; transition: all 0.3s; }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; }
+        .footer { text-align: center; padding: 20px; color: #666; margin-top: 40px; }
+        .workflow { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 20px; }
+        .workflow-step { display: inline-block; padding: 15px 25px; background: white; border-radius: 8px; margin: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .workflow-arrow { color: #667eea; font-size: 1.5em; vertical-align: middle; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Bảng Quản Lý Đơn Hàng</h1>
+        <span class="platform-badge">🖥️ Spring Boot Platform</span>
+    </div>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="/dashboard" class="active">📈 Tổng Quan</a></li>
+            <li><a href="/orders">📋 Tất Cả Đơn Hàng</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <h2>📊 Thống Kê Đơn Hàng</h2>
+            <div th:if="${stats}">
+                <div class="stat-card stat-primary">
+                    <div class="stat-label">Tổng Đơn Hàng</div>
+                    <div class="stat-number" th:text="${stats.get('total')}">0</div>
+                </div>
+                <div class="stat-card stat-warning">
+                    <div class="stat-label">Chờ Xử Lý</div>
+                    <div class="stat-number" th:text="${stats.get('pending')}">0</div>
+                </div>
+                <div class="stat-card stat-info">
+                    <div class="stat-label">Đang Xử Lý/Đóng Gói</div>
+                    <div class="stat-number" th:text="${stats.get('processing')}">0</div>
+                </div>
+                <div class="stat-card stat-success">
+                    <div class="stat-label">Hoàn Thành</div>
+                    <div class="stat-number" th:text="${stats.get('completed')}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 Đơn Hàng Gần Đây</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã ĐH</th>
+                        <th>Khách Hàng</th>
+                        <th>Ngày Tạo</th>
+                        <th>Trạng Thái</th>
+                        <th>Tổng Tiền</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${recentOrders}">
+                        <td th:text="${order.orderNumber}">ORD-001</td>
+                        <td th:text="${order.customerName}">Nguyễn Văn A</td>
+                        <td th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</td>
+                        <td>
+                            <span class="status-badge" th:classappend="'status-' + ${order.status.name().toLowerCase()}"
+                                  th:text="${order.status.displayName}">Chờ xử lý</span>
+                        </td>
+                        <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">1,000,000 VNĐ</td>
+                        <td>
+                            <a th:href="@{/orders/{id}(id=${order.id})}" class="btn btn-primary">Chi Tiết</a>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(recentOrders)}">
+                        <td colspan="6" style="text-align: center; color: #999;">Không có đơn hàng nào</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="workflow">
+            <h3 style="margin-bottom: 15px; color: #333;">🔄 Luồng Xử Lý Đơn Hàng</h3>
+            <div style="text-align: center;">
+                <span class="workflow-step">👤 Khách tạo đơn (Jakarta EE)</span>
+                <span class="workflow-arrow">→</span>
+                <span class="workflow-step">📦 Kho xử lý tồn kho (Swing)</span>
+                <span class="workflow-arrow">→</span>
+                <span class="workflow-step">📋 Quản lý phê duyệt (Spring Boot)</span>
+                <span class="workflow-arrow">→</span>
+                <span class="workflow-step">🚚 Giao hàng</span>
+                <span class="workflow-arrow">→</span>
+                <span class="workflow-step">✅ Khách xác nhận (Jakarta EE)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Hệ thống quản lý đơn hàng - Lab 16</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Student List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">Lab 14 - Spring Security</div>
+        <div class="nav-links">
+            <a th:href="@{/students}" class="active">Students</a>
+            <a th:href="@{/courses}" sec:authorize="hasRole('ADMIN')">Courses</a>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <b sec:authentication="name">User</b></span>
+            <span sec:authorize="hasRole('ADMIN')" class="role-badge role-admin">ADMIN</span>
+            <span sec:authorize="hasRole('USER') and !hasRole('ADMIN')" class="role-badge role-user">USER</span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="toolbar">
+            <h2>Student List</h2>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/students/add}" class="btn btn-add">+ Add Student</a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th sec:authorize="hasRole('ADMIN')">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student : ${students}">
+                    <td th:text="${student[0]}">1</td>
+                    <td th:text="${student[1]}">Nguyen Van A</td>
+                    <td th:text="${student[2]}">a@eaut.edu.vn</td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/students/delete/{id}(id=${student[0]})}" class="btn btn-delete"
+                           onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div th:if="${#lists.isEmpty(students)}" class="empty-msg">No students found.</div>
+        <div sec:authorize="hasRole('USER') and !hasRole('ADMIN')" class="info-box">
+            You are logged in as <b>USER</b>. Add/Delete and Course management are only for <b>ADMIN</b>.
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>New Enrollment - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Dang ky hoc phan moi</h2>
+            <form th:action="@{/enrollments}" method="post">
+                <div class="form-group">
+                    <label for="studentId">Chon sinh vien:</label>
+                    <select id="studentId" name="studentId" required>
+                        <option value="">-- Chon sinh vien --</option>
+                        <option th:each="s : ${students}"
+                                th:value="${s.id}"
+                                th:text="${s.id + ' - ' + s.name + ' (' + s.email + ')'}">Student</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="courseId">Chon mon hoc:</label>
+                    <select id="courseId" name="courseId" required>
+                        <option value="">-- Chon mon hoc --</option>
+                        <option th:each="c : ${courses}"
+                                th:value="${c.id}"
+                                th:text="${c.courseCode + ' - ' + c.courseName + ' (' + c.credits + ' tin chi)'}">Course</option>
+                    </select>
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn-save">Dang ky</button>
+                    <a th:href="@{/enrollments}" class="btn-cancel">Huy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

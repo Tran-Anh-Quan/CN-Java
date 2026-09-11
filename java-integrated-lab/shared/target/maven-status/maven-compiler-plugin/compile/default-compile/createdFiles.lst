@@ -1,0 +1,13 @@
+vn\edu\eaut\lab16\shared\entity\Order.class
+vn\edu\eaut\lab16\shared\exception\InvalidStatusTransitionException.class
+vn\edu\eaut\lab16\shared\exception\OrderLockedException.class
+vn\edu\eaut\lab16\shared\exception\ConflictException.class
+vn\edu\eaut\lab16\shared\repository\DatabaseConnection.class
+vn\edu\eaut\lab16\shared\entity\User.class
+vn\edu\eaut\lab16\shared\enums\Platform.class
+vn\edu\eaut\lab16\shared\entity\OrderItem.class
+vn\edu\eaut\lab16\shared\enums\UserRole.class
+vn\edu\eaut\lab16\shared\enums\HistoryAction.class
+vn\edu\eaut\lab16\shared\enums\OrderStatus.class
+vn\edu\eaut\lab16\shared\entity\OrderHistory.class
+vn\edu\eaut\lab16\shared\entity\Product.class

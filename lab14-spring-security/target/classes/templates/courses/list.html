@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Course List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div class="navbar">
+        <div class="brand">Lab 14 - Spring Security</div>
+        <div class="nav-links">
+            <a th:href="@{/students}">Students</a>
+            <a th:href="@{/courses}" class="active">Courses</a>
+        </div>
+        <div class="user-info">
+            <span>Welcome, <b sec:authentication="name">User</b></span>
+            <span class="role-badge role-admin">ADMIN</span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn-logout">Logout</button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Course List</h2>
+        <div class="admin-badge">This page is only accessible by <b>ADMIN</b> users.</div>
+        <table style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="course : ${courses}">
+                    <td th:text="${course[0]}">CS101</td>
+                    <td th:text="${course[1]}">Lap trinh Java</td>
+                    <td th:text="${course[2]}">3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

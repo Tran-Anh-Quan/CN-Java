@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="welcome-banner">
+            <h2>Chao mung den voi he thong quan ly dang ky hoc phan</h2>
+            <p>Lab 15 - Spring Final Project (Spring Data JPA + Spring Security)</p>
+        </div>
+
+        <h2 style="margin-top: 30px;">Thong ke tong quan</h2>
+        <div class="stats-grid">
+            <a th:href="@{/students}" class="stat-card stat-students">
+                <div class="stat-icon">&#128101;</div>
+                <div class="stat-value" th:text="${totalStudents}">0</div>
+                <div class="stat-label">Sinh vien</div>
+            </a>
+            <a th:href="@{/courses}" class="stat-card stat-courses">
+                <div class="stat-icon">&#128218;</div>
+                <div class="stat-value" th:text="${totalCourses}">0</div>
+                <div class="stat-label">Mon hoc</div>
+            </a>
+            <a th:href="@{/enrollments}" class="stat-card stat-enrollments">
+                <div class="stat-icon">&#128203;</div>
+                <div class="stat-value" th:text="${totalEnrollments}">0</div>
+                <div class="stat-label">Luot dang ky</div>
+            </a>
+        </div>
+
+        <h2 style="margin-top: 40px;">Chuc nang</h2>
+        <div class="quick-actions">
+            <a th:href="@{/students}" class="action-card">
+                <div class="action-icon">&#128196;</div>
+                <div class="action-title">Quan ly sinh vien</div>
+                <div class="action-desc">Xem, them, sua, xoa sinh vien</div>
+            </a>
+            <a th:href="@{/courses}" class="action-card">
+                <div class="action-icon">&#128214;</div>
+                <div class="action-title">Quan ly mon hoc</div>
+                <div class="action-desc">Quan ly danh sach mon hoc</div>
+            </a>
+            <a th:href="@{/enrollments}" class="action-card">
+                <div class="action-icon">&#128221;</div>
+                <div class="action-title">Dang ky hoc phan</div>
+                <div class="action-desc">Sinh vien dang ky cac mon hoc</div>
+            </a>
+            <a th:href="@{/enrollments/new}" class="action-card">
+                <div class="action-icon">&#10133;</div>
+                <div class="action-title">Tao dang ky moi</div>
+                <div class="action-desc">Dang ky mon hoc cho sinh vien</div>
+            </a>
+            <a sec:authorize="hasRole('ADMIN')" th:href="@{/h2-console}" target="_blank" class="action-card">
+                <div class="action-icon">&#128190;</div>
+                <div class="action-title">H2 Console</div>
+                <div class="action-desc">Xem co so du lieu</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

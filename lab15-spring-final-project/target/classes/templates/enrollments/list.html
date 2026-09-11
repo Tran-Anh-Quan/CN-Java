@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollments - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="toolbar">
+            <h2>
+                <span th:if="${filterStudent != null}">
+                    Dang ky cua: <span th:text="${filterStudent.name}" style="color:#667eea;">Student</span>
+                </span>
+                <span th:unless="${filterStudent != null}">Tat ca dang ky hoc phan</span>
+            </h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <a th:href="@{/enrollments/new}" class="btn btn-add">+ Tao dang ky moi</a>
+                <a th:if="${filterStudent != null}" th:href="@{/enrollments}" class="btn btn-clear">Hien thi tat ca</a>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Sinh vien</th>
+                    <th>Email</th>
+                    <th>Ma mon hoc</th>
+                    <th>Ten mon hoc</th>
+                    <th>Ngay dang ky</th>
+                    <th>Diem</th>
+                    <th sec:authorize="hasRole('ADMIN')">Thao tac</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="en : ${enrollments}">
+                    <td th:text="${en.id}">1</td>
+                    <td th:text="${en.student.name}">Student Name</td>
+                    <td th:text="${en.student.email}">email@eaut</td>
+                    <td><b th:text="${en.course.courseCode}">CS101</b></td>
+                    <td th:text="${en.course.courseName}">Course Name</td>
+                    <td th:text="${en.enrolledAt}">2026-01-01</td>
+                    <td>
+                        <span th:if="${en.grade != null}" th:text="${en.grade}">8.5</span>
+                        <span th:unless="${en.grade != null}" style="color:#999;">-</span>
+                        <form sec:authorize="hasRole('ADMIN')"
+                              th:action="@{/enrollments/grade/{id}(id=${en.id})}"
+                              method="post" class="grade-form" style="margin-top:4px;">
+                            <input type="number" name="grade" min="0" max="10" step="0.1"
+                                   placeholder="Diem" th:value="${en.grade}" />
+                            <button type="submit">Set</button>
+                        </form>
+                    </td>
+                    <td sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/enrollments/delete/{id}(id=${en.id})}" class="btn btn-delete"
+                           onclick="return confirm('Huy dang ky hoc phan nay?')">Huy</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(enrollments)}" class="empty-msg">
+            Chua co dang ky hoc phan nao trong he thong.
+        </div>
+    </div>
+</body>
+</html>

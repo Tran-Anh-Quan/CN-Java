@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>403 - Access Denied</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .error-card {
+            text-align: center;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 50px 40px;
+            max-width: 450px;
+        }
+        .error-card h1 {
+            font-size: 80px;
+            margin-bottom: 10px;
+        }
+        .error-card h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .error-card p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #fff;
+            color: #ee5a24;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: transform 0.2s;
+        }
+        .btn-back:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <h1>403</h1>
+        <h2>Access Denied</h2>
+        <p>You do not have permission to access this page.</p>
+        <a th:href="@{/students}" class="btn-back">Go to Home</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Courses - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="toolbar">
+            <h2>
+                Cac mon hoc cua: <span th:text="${student.name}" style="color:#667eea;">Student</span>
+                <small style="font-size:14px; color:#888; margin-left:10px;" th:text="${student.email}">email</small>
+            </h2>
+            <a th:href="@{/students}" class="btn btn-clear">&laquo; Quay lai danh sach</a>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Ma mon hoc</th>
+                    <th>Ten mon hoc</th>
+                    <th>So tin chi</th>
+                    <th>Ngay dang ky</th>
+                    <th>Diem</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="en : ${courses}">
+                    <td><b th:text="${en.course.courseCode}">CS101</b></td>
+                    <td th:text="${en.course.courseName}">Lap trinh Java</td>
+                    <td th:text="${en.course.credits}">3</td>
+                    <td th:text="${en.enrolledAt}">2026-01-01</td>
+                    <td>
+                        <span th:if="${en.grade != null}" th:text="${en.grade}">8.5</span>
+                        <span th:unless="${en.grade != null}" style="color:#999;">Chua cap nhat</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div th:if="${#lists.isEmpty(courses)}" class="empty-msg">
+            Sinh vien <b th:text="${student.name}"></b> chua dang ky mon hoc nao.
+        </div>
+
+        <div style="margin-top:20px;">
+            <a th:href="@{/enrollments/new}" class="btn btn-add">+ Dang ky mon hoc moi cho sinh vien nay</a>
+        </div>
+    </div>
+</body>
+</html>

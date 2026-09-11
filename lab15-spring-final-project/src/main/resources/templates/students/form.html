@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Form - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+
+    <div class="container">
+        <div class="form-card">
+            <h2 th:text="${student.id != null ? 'Sua sinh vien' : 'Them sinh vien moi'}">Form</h2>
+            <form th:action="@{/students}" th:object="${student}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <label for="name">Ho va ten:</label>
+                    <input type="text" id="name" th:field="*{name}" required placeholder="Nhap ho ten sinh vien" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" th:field="*{email}" required placeholder="Nhap email sinh vien" />
+                </div>
+                <div class="actions">
+                    <button type="submit" class="btn-save">Luu</button>
+                    <a th:href="@{/students}" class="btn-cancel">Huy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

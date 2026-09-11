@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi Tiết Đơn Hàng - Lab 16</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+    <h1>📋 Chi Tiết Đơn Hàng</h1>
+    <div class="header-right">
+        <a href="/logout" class="logout-btn">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<!-- Navbar -->
+<nav class="navbar">
+    <ul>
+        <li><a href="/dashboard">📈 Tổng Quan</a></li>
+        <li><a href="/orders" class="active">📋 Đơn Hàng</a></li>
+        <li><a href="/history">📜 Nhật Ký</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <!-- Alerts -->
+    <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+    <div class="card" th:if="${order}">
+        <!-- Order header -->
+        <div class="order-header">
+            <div>
+                <span class="order-number" th:text="${order.orderNumber}">ORD-001</span>
+                <span class="version-badge">v<span th:text="${order.version}">0</span></span>
+            </div>
+            <span class="status-badge"
+                  th:classappend="'status-' + ${order.status.name().toLowerCase()}"
+                  th:text="${order.status.displayName}">Chờ xử lý</span>
+        </div>
+
+        <!-- Customer info -->
+        <h2>👤 Thông Tin Khách Hàng</h2>
+        <div class="info-grid">
+            <div class="info-item"><label>Khách hàng</label><span th:text="${order.customerName}">Nguyễn Văn A</span></div>
+            <div class="info-item"><label>Email</label><span th:text="${order.customerEmail}">email@example.com</span></div>
+            <div class="info-item"><label>Số điện thoại</label><span th:text="${order.customerPhone}">0912345678</span></div>
+            <div class="info-item"><label>Ngày đặt</label><span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</span></div>
+        </div>
+        <div class="info-item" style="margin-bottom: 20px;">
+            <label>Địa chỉ giao hàng</label>
+            <span th:text="${order.shippingAddress}">123 Đường ABC</span>
+        </div>
+
+        <!-- Cancellation info -->
+        <div th:if="${order.status.name() == 'CANCELLED'}" style="background: #f8d7da; padding: 14px; border-radius: 8px; margin-bottom: 20px;">
+            <strong style="color: #721c24;">❌ Lý do hủy:</strong>
+            <span th:text="${order.cancellationReason}">Lý do hủy</span><br>
+            <small style="color: #721c24;">
+                Hủy bởi <strong th:text="${order.cancelledBy}">user</strong>
+                trên <strong th:text="${order.cancelledPlatform.displayName}">Platform</strong>
+                lúc <strong th:text="${#temporals.format(order.cancelledAt, 'dd/MM/yyyy HH:mm')}">time</strong>
+            </small>
+        </div>
+
+        <!-- Order items -->
+        <h2>📦 Chi Tiết Đơn Hàng</h2>
+        <table>
+            <thead><tr><th>#</th><th>Sản phẩm</th><th>Giá</th><th>SL</th><th>Thành tiền</th></tr></thead>
+            <tbody>
+                <tr th:each="item, stat : ${order.items}">
+                    <td th:text="${stat.count}">1</td>
+                    <td th:text="${item.productName}">Sản phẩm A</td>
+                    <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'">1,000,000 ₫</td>
+                    <td th:text="${item.quantity}">1</td>
+                    <td th:text="${#numbers.formatDecimal(item.subtotal, 0, 'COMMA', 0, 'POINT')} + ' ₫'">1,000,000 ₫</td>
+                </tr>
+                <tr style="background: #f0f4ff; font-weight: bold;">
+                    <td colspan="4">💰 TỔNG CỘNG:</td>
+                    <td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">1,000,000 ₫</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Action buttons -->
+        <div class="actions">
+            <a href="/orders" class="btn btn-secondary">← Quay về danh sách</a>
+
+            <!-- Approve (READY → SHIPPING) -->
+            <span th:if="${order.status.name() == 'READY'}">
+                <form th:action="@{/orders/{id}/approve(id=${order.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="version" th:value="${order.version}">
+                    <button type="submit" class="btn btn-success"
+                            onclick="return confirm('Xác nhận phê duyệt giao hàng?');">🚚 Phê Duyệt Giao Hàng</button>
+                </form>
+            </span>
+
+            <!-- Complete (SHIPPING → COMPLETED) -->
+            <span th:if="${order.status.name() == 'SHIPPING'}">
+                <form th:action="@{/orders/{id}/complete(id=${order.id})}" method="post" style="display:inline;">
+                    <input type="hidden" name="version" th:value="${order.version}">
+                    <button type="submit" class="btn btn-info"
+                            onclick="return confirm('Xác nhận hoàn thành đơn?');">✅ Hoàn Thành</button>
+                </form>
+            </span>
+
+            <!-- Cancel (PENDING, PROCESSING, READY) -->
+            <span th:if="${order.status.name() == 'PENDING' or order.status.name() == 'PROCESSING' or order.status.name() == 'READY'}">
+                <form th:action="@{/orders/{id}/cancel(id=${order.id})}" method="post" class="cancel-form"
+                      onsubmit="return confirm('Xác nhận hủy đơn hàng này?');">
+                    <input type="text" name="reason" placeholder="Lý do hủy..." required>
+                    <input type="hidden" name="version" th:value="${order.version}">
+                    <button type="submit" class="btn btn-danger">❌ Hủy Đơn</button>
+                </form>
+            </span>
+        </div>
+    </div>
+
+    <!-- Order History -->
+    <div class="card" th:if="${history != null and not #lists.isEmpty(history)}">
+        <h2>📜 Lịch Sử Đơn Hàng</h2>
+        <div class="timeline">
+            <div class="timeline-item" th:each="h : ${history}">
+                <div class="timeline-dot">✓</div>
+                <div class="timeline-content">
+                    <h4 th:text="${h.action.displayName}">Thay đổi trạng thái</h4>
+                    <p>
+                        <span th:if="${h.fromStatus != null}"
+                              th:text="${h.fromStatus.displayName + ' → ' + h.toStatus.displayName}">PENDING → PROCESSING</span>
+                        <span th:unless="${h.fromStatus != null}"
+                              th:text="${'Trạng thái: ' + h.toStatus.displayName}">Trạng thái: PENDING</span>
+                    </p>
+                    <p th:if="${h.notes != null}" th:text="${h.notes}">Ghi chú</p>
+                    <span class="meta">
+                        <strong th:text="${h.performedBy}">user</strong> •
+                        <em th:text="${h.performedPlatform.displayName}">Platform</em> •
+                        <span th:text="${#temporals.format(h.createdAt, 'dd/MM/yyyy HH:mm:ss')}">time</span>
+                    </span>
+                    <div class="timeline-content tracking-info" th:if="${h.ipAddress != null or h.hostname != null}">
+                        🖥️
+                        <span th:if="${h.ipAddress != null}">📍 IP: <strong th:text="${h.ipAddress}">0.0.0.0</strong></span>
+                        <span th:if="${h.hostname != null}">Host: <strong th:text="${h.hostname}">hostname</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer"><p>Hệ thống quản lý đơn hàng - Lab 16 | Multi-Platform Integration</p></div>
+</body>
+</html>

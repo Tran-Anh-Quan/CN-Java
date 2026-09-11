@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Lab 15</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body class="login-page">
+    <div class="login-card">
+        <h2>Lab 15 - Login</h2>
+        <p class="subtitle">Spring Data JPA + Spring Security</p>
+
+        <div th:if="${param.error}" class="alert alert-error">
+            Sai ten dang nhap hoac mat khau!
+        </div>
+        <div th:if="${param.logout}" class="alert alert-success">
+            Ban da dang xuat thanh cong.
+        </div>
+
+        <form th:action="@{/login}" method="post">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" autofocus required />
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required />
+            </div>
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+
+        <div class="info">
+            <strong>Tai khoan test:</strong><br/>
+            User: <b>user</b> / <b>123456</b> (ROLE_USER)<br/>
+            Admin: <b>admin</b> / <b>admin123</b> (ROLE_ADMIN)
+        </div>
+    </div>
+</body>
+</html>

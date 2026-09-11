@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:block th:fragment="head(title)">
+        <title th:text="${title} + ' - Lab 16'">Management Portal</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}">
+    </th:block>
+</head>
+<body>
+
+<!-- Header fragment -->
+<div th:fragment="header(title, username)" class="header">
+    <h1 th:text="${title}">📊 Dashboard</h1>
+    <div class="header-right">
+        <span class="user-info" th:if="${username != null}">👤 <span th:text="${username}">User</span></span>
+        <a href="/logout" class="logout-btn">🚪 Đăng xuất</a>
+    </div>
+</div>
+
+<!-- Navbar fragment -->
+<nav th:fragment="navbar(active)" class="navbar">
+    <ul>
+        <li>
+            <a href="/dashboard"
+               th:classappend="${active == 'dashboard' ? 'active' : ''}">
+                📈 Tổng Quan
+            </a>
+        </li>
+        <li>
+            <a href="/orders"
+               th:classappend="${active == 'orders' ? 'active' : ''}">
+                📋 Đơn Hàng
+            </a>
+        </li>
+        <li>
+            <a href="/history"
+               th:classappend="${active == 'history' ? 'active' : ''}">
+                📜 Nhật Ký
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- Container fragment -->
+<div th:fragment="container" class="container">
+    <th:block th:replace="${content}"></th:block>
+</div>
+
+<!-- Footer fragment -->
+<div th:fragment="footer" class="footer">
+    <p>Hệ thống quản lý đơn hàng - Lab 16 | Multi-Platform Integration</p>
+</div>
+
+</body>
+</html>
